@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murderwings — Livery Color Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Stardos+Stencil:wght@400;700&family=Special+Elite&family=Allura&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #e8ddc2;
+    --paper-dark: #d8c9a4;
+    --paper-edge: #c3b388;
+    --ink: #1a1d14;
+    --ink-soft: #3a3d2c;
+    --ink-stamp: #8a2a25;
+    --ink-classified: #5a1f4a;
+    --olive-trim: #4a5135;
+    --gold-trim: #b88a3a;
+    --shadow: rgba(26, 29, 20, 0.25);
+    --swatch-border: rgba(26, 29, 20, 0.35);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Special Elite', 'Courier New', monospace;
+    background: var(--paper);
+    background-image:
+      radial-gradient(ellipse at top left, rgba(0,0,0,0.08), transparent 60%),
+      radial-gradient(ellipse at bottom right, rgba(0,0,0,0.10), transparent 50%),
+      repeating-linear-gradient(0deg, transparent 0 3px, rgba(0,0,0,0.012) 3px 4px),
+      repeating-linear-gradient(90deg, transparent 0 3px, rgba(0,0,0,0.012) 3px 4px);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 30px 20px 200px;
+    line-height: 1.5;
+  }
+
+  /* Aged paper noise overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(80, 50, 20, 0.06) 0%, transparent 4%),
+      radial-gradient(circle at 80% 70%, rgba(80, 50, 20, 0.08) 0%, transparent 3%),
+      radial-gradient(circle at 50% 50%, rgba(80, 50, 20, 0.04) 0%, transparent 6%),
+      radial-gradient(circle at 10% 80%, rgba(50, 30, 10, 0.05) 0%, transparent 4%);
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* === HEADER === */
+  header {
+    border: 3px double var(--ink);
+    padding: 28px 32px 24px;
+    margin-bottom: 32px;
+    background: rgba(255,255,255,0.15);
+    position: relative;
+  }
+
+  header::before {
+    content: 'RESTRICTED';
+    position: absolute;
+    top: 14px;
+    right: 22px;
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    color: var(--ink-stamp);
+    border: 2px solid var(--ink-stamp);
+    padding: 3px 10px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    transform: rotate(3deg);
+    opacity: 0.85;
+  }
+
+  header::after {
+    content: 'TM-MWG-01';
+    position: absolute;
+    top: 14px;
+    left: 22px;
+    font-family: 'Stardos Stencil', sans-serif;
+    color: var(--ink-soft);
+    font-size: 11px;
+    letter-spacing: 2px;
+  }
+
+  h1 {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    font-size: clamp(28px, 5vw, 48px);
+    letter-spacing: 3px;
+    text-align: center;
+    margin: 18px 0 6px;
+    color: var(--ink);
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 1.5px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  .header-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--ink-soft);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* === SECTIONS === */
+  section {
+    margin-bottom: 44px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .section-num {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    color: var(--ink-stamp);
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+
+  .section-title {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 2.5px;
+    flex: 1;
+  }
+
+  .section-note {
+    font-size: 12px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .section-intro {
+    font-size: 13px;
+    margin-bottom: 18px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.2);
+    border-left: 3px solid var(--olive-trim);
+    color: var(--ink-soft);
+    max-width: 900px;
+  }
+
+  /* === COLOR SWATCH GRID === */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .swatch-grid.tight {
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 12px;
+  }
+
+  .swatch {
+    background: rgba(255,255,255,0.4);
+    border: 1.5px solid var(--swatch-border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+  }
+
+  .swatch:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px var(--shadow);
+  }
+
+  .swatch.selected {
+    border-color: var(--ink-stamp);
+    border-width: 2.5px;
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink-stamp);
+  }
+
+  .swatch.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 24px;
+    height: 24px;
+    background: var(--ink-stamp);
+    color: var(--paper);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 2;
+  }
+
+  .swatch-color {
+    height: 110px;
+    width: 100%;
+    border-bottom: 1.5px solid var(--swatch-border);
+    position: relative;
+  }
+
+  .swatch.tight .swatch-color {
+    height: 80px;
+  }
+
+  .swatch-color::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 -10px 15px rgba(0,0,0,0.12), inset 0 2px 4px rgba(255,255,255,0.08);
+    pointer-events: none;
+  }
+
+  .swatch-body {
+    padding: 10px 12px 12px;
+  }
+
+  .swatch-name {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.8px;
+    line-height: 1.25;
+    color: var(--ink);
+    margin-bottom: 6px;
+  }
+
+  .swatch-meta {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  .swatch-meta .label {
+    color: var(--olive-trim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+  }
+
+  .swatch-meta .hex {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    color: var(--ink);
+  }
+
+  /* === GROUP PATTERN CARDS === */
+  .group-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+
+  .group-card {
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid var(--swatch-border);
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    position: relative;
+  }
+
+  .group-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px var(--shadow);
+  }
+
+  .group-card.selected {
+    border-color: var(--ink-stamp);
+    border-width: 2.5px;
+    box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink-stamp);
+  }
+
+  .group-nose {
+    height: 90px;
+    width: 100%;
+    border-bottom: 1.5px solid var(--swatch-border);
+    position: relative;
+  }
+
+  .group-body {
+    padding: 12px 14px;
+  }
+
+  .group-name {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    margin-bottom: 3px;
+  }
+
+  .group-nickname {
+    font-style: italic;
+    font-size: 11.5px;
+    color: var(--ink-stamp);
+    margin-bottom: 6px;
+  }
+
+  .group-detail {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+
+  .group-detail .label {
+    color: var(--olive-trim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+  }
+
+  .group-squads {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--ink-soft);
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .squad-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    padding: 2px 6px;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid var(--swatch-border);
+  }
+
+  .squad-chip .dot {
+    width: 10px;
+    height: 10px;
+    border: 1px solid var(--swatch-border);
+    flex-shrink: 0;
+  }
+
+  /* === FILTER PILLS === */
+  .filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .filter-pill {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 6px 12px;
+    background: transparent;
+    border: 1.5px solid var(--ink-soft);
+    color: var(--ink-soft);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .filter-pill.active {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* === COMPARISON TRAY === */
+  .tray {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--paper-dark);
+    border-top: 3px double var(--ink);
+    padding: 14px 24px 16px;
+    z-index: 100;
+    box-shadow: 0 -4px 16px var(--shadow);
+    transition: transform 0.25s ease;
+  }
+
+  .tray.empty {
+    transform: translateY(calc(100% - 44px));
+  }
+
+  .tray-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .tray-title {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2px;
+    flex: 1;
+  }
+
+  .tray-count {
+    background: var(--ink-stamp);
+    color: var(--paper);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+
+  .tray-clear {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    background: transparent;
+    border: 1px solid var(--ink-soft);
+    color: var(--ink-soft);
+    padding: 4px 10px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .tray-clear:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .tray-items {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    min-height: 88px;
+  }
+
+  .tray-empty-msg {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-style: italic;
+    padding: 30px 0;
+  }
+
+  .tray-item {
+    flex-shrink: 0;
+    width: 140px;
+    border: 1.5px solid var(--swatch-border);
+    background: rgba(255,255,255,0.5);
+  }
+
+  .tray-item-color {
+    height: 44px;
+    position: relative;
+  }
+
+  .tray-item-body {
+    padding: 5px 7px;
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  .tray-item-name {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    color: var(--ink);
+  }
+
+  .tray-item-hex {
+    font-family: monospace;
+    color: var(--ink-soft);
+  }
+
+  .tray-item-remove {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 18px;
+    height: 18px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 11px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* === DETAIL POPUP === */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 18, 10, 0.7);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-backdrop.active { display: flex; }
+
+  .modal {
+    background: var(--paper);
+    border: 3px double var(--ink);
+    max-width: 580px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .modal-color {
+    height: 200px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .modal-body {
+    padding: 24px 28px 28px;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--paper);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    z-index: 3;
+  }
+
+  .modal-name {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+
+  .modal-tagline {
+    font-style: italic;
+    color: var(--ink-stamp);
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .modal-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--paper-edge);
+    font-size: 13px;
+  }
+
+  .modal-row .label {
+    color: var(--olive-trim);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-size: 11px;
+    font-weight: bold;
+    padding-top: 2px;
+  }
+
+  .modal-row .value {
+    color: var(--ink);
+  }
+
+  .modal-row .value .mono {
+    font-family: monospace;
+    font-weight: bold;
+  }
+
+  .modal-actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .modal-btn {
+    font-family: 'Stardos Stencil', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    padding: 8px 14px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 2px solid var(--ink);
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+
+  .modal-btn.secondary {
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .modal-btn:hover { background: var(--ink-stamp); border-color: var(--ink-stamp); color: var(--paper); }
+
+  /* === FOOTNOTE === */
+  .footnote {
+    margin-top: 40px;
+    padding: 16px 20px;
+    border-top: 1px dashed var(--ink-soft);
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-align: center;
+    line-height: 1.7;
+  }
+
+  .footnote .stamp {
+    display: inline-block;
+    font-family: 'Stardos Stencil', sans-serif;
+    color: var(--ink-stamp);
+    border: 1.5px solid var(--ink-stamp);
+    padding: 2px 8px;
+    letter-spacing: 1.5px;
+    margin: 0 4px;
+    transform: rotate(-2deg);
+  }
+
+  /* === PATTERN HELPERS === */
+  .pattern-solid { background-color: var(--c1); }
+  .pattern-checker {
+    background-image:
+      linear-gradient(45deg, var(--c1) 25%, transparent 25%, transparent 75%, var(--c1) 75%),
+      linear-gradient(45deg, var(--c1) 25%, var(--c2) 25%, var(--c2) 75%, var(--c1) 75%);
+    background-size: 22px 22px;
+    background-position: 0 0, 11px 11px;
+  }
+  .pattern-vstripes {
+    background: repeating-linear-gradient(90deg, var(--c1) 0 16px, var(--c2) 16px 32px);
+  }
+  .pattern-diamonds {
+    background-image:
+      linear-gradient(45deg, var(--c1) 25%, transparent 25%, transparent 75%, var(--c1) 75%),
+      linear-gradient(45deg, var(--c1) 25%, var(--c2) 25%, var(--c2) 75%, var(--c1) 75%);
+    background-size: 28px 28px;
+    background-position: 0 0, 14px 14px;
+    transform: rotate(0deg);
+    /* The actual checker IS the diamonds when rotated 45deg in real life;
+       for visual clarity we show as checker but tagged differently */
+  }
+  .pattern-redyellow-357 {
+    background-image:
+      linear-gradient(45deg, var(--c1) 25%, transparent 25%, transparent 75%, var(--c1) 75%),
+      linear-gradient(45deg, var(--c1) 25%, var(--c2) 25%, var(--c2) 75%, var(--c1) 75%);
+    background-size: 22px 22px;
+    background-position: 0 0, 11px 11px;
+  }
+  .pattern-none {
+    background:
+      repeating-linear-gradient(45deg, transparent 0 8px, rgba(0,0,0,0.08) 8px 9px),
+      var(--c1, #b5bcc1);
+  }
+
+  /* Help text */
+  .help-banner {
+    background: rgba(184, 138, 58, 0.15);
+    border: 1.5px dashed var(--gold-trim);
+    padding: 12px 16px;
+    font-size: 12.5px;
+    color: var(--ink);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .help-banner-icon {
+    font-family: 'Stardos Stencil', sans-serif;
+    color: var(--gold-trim);
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 1;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 16px 12px 240px; }
+    header { padding: 22px 18px 18px; }
+    h1 { font-size: 28px; letter-spacing: 2px; }
+    .section-num, .section-title { font-size: 18px; }
+    .swatch-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .swatch-color { height: 80px; }
+    .group-grid { grid-template-columns: 1fr; }
+    .modal-row { grid-template-columns: 90px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <div class="subtitle">Eyes Only · Painter's Reference</div>
+  <h1>The Murderwings</h1>
+  <div class="subtitle">Livery Color Catalog · WWII USAAF Conversion Guide</div>
+  <div class="header-meta">
+    <span>Kill Team Raptors / Chaos Marines</span>
+    <span>Compiled from FS &amp; ANA specifications</span>
+    <span>Brush application · No airbrush req.</span>
+  </div>
+</header>
+
+<div class="help-banner">
+  <span class="help-banner-icon">!</span>
+  <span><strong>Click any swatch</strong> to see full paint specs (FS code, Vallejo/Citadel matches, usage notes). <strong>Click the ★</strong> in the popup to add to your comparison tray at the bottom of the screen.</span>
+</div>
+
+<!-- ====== SECTION 1: BASE CAMOUFLAGE ====== -->
+<section>
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title">Base Camouflage</div>
+    <div class="section-note">USAAF Spec 24114 · Sept 1940</div>
+  </div>
+  <div class="section-intro">
+    The factory-applied two-tone scheme on most ETO fighters before mid-1944. Olive Drab faded
+    dramatically in service — heavy panel-tone variation is historically correct, not careless.
+    Use this as the dominant body color of each mini before applying Group/Squadron markings.
+  </div>
+  <div class="swatch-grid" id="base-grid"></div>
+</section>
+
+<!-- ====== SECTION 2: GROUP NOSE SCHEMES ====== -->
+<section>
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title">Group Nose Schemes</div>
+    <div class="section-note">VIII Fighter Command · March 1944</div>
+  </div>
+  <div class="section-intro">
+    Each Fighter Group adopted a distinctive nose scheme — solid color, checkers, stripes, or diamonds —
+    for at-a-glance formation identification. Pick <strong>one</strong> for the whole Kill Team to read
+    as a single squadron. Click any card for paint specs.
+  </div>
+  <div class="filters" id="group-filters">
+    <button class="filter-pill active" data-filter="all">All Groups</button>
+    <button class="filter-pill" data-filter="solid">Solid Color</button>
+    <button class="filter-pill" data-filter="checker">Checkers</button>
+    <button class="filter-pill" data-filter="stripe">Stripes</button>
+    <button class="filter-pill" data-filter="other">Other</button>
+  </div>
+  <div class="group-grid" id="group-grid"></div>
+</section>
+
+<!-- ====== SECTION 3: SQUADRON RUDDER COLORS ====== -->
+<section>
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title">Squadron Rudder Colors</div>
+    <div class="section-note">8th AF Order · Fall 1944</div>
+  </div>
+  <div class="section-intro">
+    Within each Group, individual squadrons were identified by rudder color. For the Kill Team this
+    is the per-mini differentiator — use it on a helmet faceplate, chest panel, knee pad, or
+    backpack vent. Pick a different rudder color per mini to give each pilot their own identity.
+  </div>
+  <div class="swatch-grid tight" id="rudder-grid"></div>
+</section>
+
+<!-- ====== SECTION 4: TRIM & DETAIL ====== -->
+<section>
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title">Trim &amp; Personal Markings</div>
+    <div class="section-note">Pilot &amp; Crew Chief Discretion</div>
+  </div>
+  <div class="section-intro">
+    The top layer — pilot personalization. Script names, kill tallies, nose pinups, mission marks.
+    Almost always applied on the LEFT (port) side of the cowling for the press cameras.
+  </div>
+  <div class="swatch-grid tight" id="trim-grid"></div>
+</section>
+
+<!-- ====== SECTION 5: WEATHERING & EFFECTS ====== -->
+<section>
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title">Weathering &amp; Effect Colors</div>
+    <div class="section-note">For Oils, Washes &amp; Exhaust Staining</div>
+  </div>
+  <div class="section-intro">
+    The colors you'll reach for after the base scheme is down — exhaust stains, oil leaks, gun blast,
+    chipped aluminum, sun-faded OD highlights. These tie the WWII modeling techniques together
+    on top of standard 40k washes.
+  </div>
+  <div class="swatch-grid tight" id="weathering-grid"></div>
+</section>
+
+<div class="footnote">
+  <span class="stamp">CLASSIFIED</span>
+  Sources: USAAF Spec 24114 · FS-595 color standards · Vallejo Model Color/Air ranges · Citadel paint range
+  <span class="stamp">FOR PAINTER'S USE</span>
+  <br>
+  All hex values are <strong>approximations</strong> — paint reads differently under different lighting.
+  Always test on a tester miniature or scrap sprue before committing to a full mini.
+</div>
+
+</div>
+
+<!-- ====== TRAY ====== -->
+<div class="tray empty" id="tray">
+  <div class="tray-header">
+    <div class="tray-title">Comparison Tray</div>
+    <span class="tray-count" id="tray-count">0</span>
+    <button class="tray-clear" onclick="clearTray()">Clear All</button>
+  </div>
+  <div class="tray-items" id="tray-items">
+    <div class="tray-empty-msg">No colors selected. Click any swatch, then ★ Add to Compare in the popup.</div>
+  </div>
+</div>
+
+<!-- ====== MODAL ====== -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-color" id="modal-color"></div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+/* ===================================================================
+   COLOR DATA
+   =================================================================== */
+
+// Base camouflage colors
+const BASE_COLORS = [
+  {
+    id: 'od-fresh',
+    name: 'Dark Olive Drab',
+    tagline: 'USAAF No. 41 / ANA 613 — factory fresh',
+    hex: '#4A4F2C',
+    fs: 'FS 34088 / FS 34087',
+    spec: 'USAAF Spec 24114 · No. 41',
+    vallejo: '71.316 Model Air USAAF Olive Drab · 70.887 Model Color Olive Brown',
+    citadel: 'Castellan Green (base) · highlight up with Death World Forest',
+    usage: 'All upper surfaces on pre-mid-1944 fighters. For the Murderwings, this is the primary body color on Marine armor. Apply unevenly across panels for authentic faded look.',
+    notes: 'Notorious for fading and pigment variation. Different paint manufacturers in WWII produced visibly different OD shades — heavy panel-tone variation is correct.'
+  },
+  {
+    id: 'od-faded',
+    name: 'Olive Drab (Faded)',
+    tagline: 'Sun-bleached field condition',
+    hex: '#6F6D47',
+    fs: 'FS 34086 (faded variant)',
+    spec: 'In-service weathered',
+    vallejo: '71.043 Model Air Yellow Olive · mix with base OD',
+    citadel: 'Death World Forest · highlight with Ushabti Bone',
+    usage: 'Use on raised armor surfaces — pauldrons, knees, helmet crowns — to suggest UV exposure and wear. Edge highlights on OD panels.',
+    notes: 'Real WWII OD often shifted dramatically toward tan or muddy brown after weeks in the field. Mix this freely with the fresh OD for natural variation.'
+  },
+  {
+    id: 'neutral-gray',
+    name: 'Neutral Gray',
+    tagline: 'USAAF No. 43 — lower surfaces',
+    hex: '#7E8487',
+    fs: 'FS 36173',
+    spec: 'USAAF Spec 24114 · No. 43',
+    vallejo: '71.051 Model Air Neutral Gray · 70.992 Model Color Neutral Grey',
+    citadel: 'Mechanicus Standard Grey (base) · Dawnstone (mid)',
+    usage: 'Undersides of WWII aircraft. On the minis, use for shadow recesses on the OD armor, under-eye visor surfaces, or as the dominant tone on under-arm/under-leg armor.',
+    notes: 'Slightly cool gray. Avoid pure warm grey substitutes — the temperature drop between OD and Neutral Gray is part of the period look.'
+  },
+  {
+    id: 'medium-green',
+    name: 'Medium Green',
+    tagline: 'USAAF No. 42 — edge blotching',
+    hex: '#4B6043',
+    fs: 'No exact FS · darker forest tone',
+    spec: 'USAAF Spec 24114 · No. 42',
+    vallejo: '71.124 Model Air Medium Green',
+    citadel: 'Caliban Green (base) · Warpstone Glow mix',
+    usage: 'Originally applied as soft-edge blotches along OD panel boundaries to disrupt edges from above. Use sparingly as panel-edge fade or shadow tone.',
+    notes: 'Rarely seen on production aircraft by mid-1944 — most factories dropped it for simplicity. Useful as a third tonal variation on a multi-panel mini.'
+  },
+];
+
+// 8th Air Force Fighter Groups
+const GROUPS = [
+  // Solid color groups
+  {
+    id: 'fg-4', name: '4th FG', nickname: 'Eagles',
+    pattern: 'solid', c1: '#BB1F2E', c2: null,
+    base: 'RAF Debden, Essex',
+    aircraft: 'P-47 → P-51 (early 1944)',
+    callsign: 'HORSEBACK',
+    note: 'Highest-scoring 8th AF fighter group (1,016 victories). Donald Blakeslee\'s command. Originated from RAF Eagle Squadrons.',
+    squadrons: [
+      { name: '334th FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'QP-' },
+      { name: '335th FS', rudder: '#F0EDE3', rudderName: 'White', code: 'WD-' },
+      { name: '336th FS', rudder: '#2B5797', rudderName: 'Blue', code: 'VF-' },
+    ]
+  },
+  {
+    id: 'fg-56', name: '56th FG', nickname: "Zemke's Wolfpack",
+    pattern: 'solid', c1: '#BB1F2E', c2: null,
+    base: 'RAF Boxted, Essex',
+    aircraft: 'P-47 (only 8th AF P-47 group to war\'s end)',
+    callsign: 'YARDSTICK',
+    note: 'Top-scoring P-47 group (677 kills). Home of Gabreski, Zemke, Bob Johnson.',
+    squadrons: [
+      { name: '61st FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'HV-' },
+      { name: '62nd FS', rudder: '#F0BE0E', rudderName: 'Yellow', code: 'LM-' },
+      { name: '63rd FS', rudder: '#2B5797', rudderName: 'Blue', code: 'UN-' },
+    ]
+  },
+  {
+    id: 'fg-355', name: '355th FG', nickname: null,
+    pattern: 'solid', c1: '#F0EDE3', c2: null,
+    base: 'RAF Steeple Morden, Hertfordshire',
+    aircraft: 'P-47 → P-51',
+    callsign: 'SUNSHADE',
+    note: 'White nose. Clean and subtle — leaves room for individual color trim on each mini. "Texas Terror IV" flew with this group.',
+    squadrons: [
+      { name: '354th FS', rudder: '#BB1F2E', rudderName: 'Red (Trim)', code: 'WR-' },
+      { name: '357th FS', rudder: '#2B5797', rudderName: 'Blue (Trim)', code: 'OS-' },
+      { name: '358th FS', rudder: '#F0BE0E', rudderName: 'Yellow (Trim)', code: 'YF-' },
+    ]
+  },
+  {
+    id: 'fg-361', name: '361st FG', nickname: 'Yellowjackets',
+    pattern: 'solid', c1: '#F0BE0E', c2: null,
+    base: 'RAF Bottisham (later Little Walden)',
+    aircraft: 'P-47 → P-51',
+    callsign: 'WILDCAT',
+    note: 'Bright yellow nose — most aggressive Group color on the field. Pairs beautifully with OD body.',
+    squadrons: [
+      { name: '374th FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'B7-' },
+      { name: '375th FS', rudder: '#2B5797', rudderName: 'Blue', code: 'E2-' },
+      { name: '376th FS', rudder: '#F0BE0E', rudderName: 'Yellow', code: 'E9-' },
+    ]
+  },
+  {
+    id: 'fg-352', name: '352nd FG', nickname: 'Blue-Nosed Bastards of Bodney',
+    pattern: 'solid', c1: '#2B5797', c2: null,
+    base: 'RAF Bodney, Norfolk',
+    aircraft: 'P-47 → P-51 (April 1944)',
+    callsign: 'HATFIELD',
+    note: 'Iconic medium blue swept-back nose. Home of George Preddy (top P-51 ace) and John C. Meyer. Three "generations" of blue used in service.',
+    squadrons: [
+      { name: '328th FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'PE-' },
+      { name: '486th FS', rudder: '#F0BE0E', rudderName: 'Yellow', code: 'PZ-' },
+      { name: '487th FS', rudder: '#2B5797', rudderName: 'Blue', code: 'HO-' },
+    ]
+  },
+  {
+    id: 'fg-359', name: '359th FG', nickname: null,
+    pattern: 'solid', c1: '#1F5C28', c2: null,
+    base: 'RAF East Wretham, Norfolk',
+    aircraft: 'P-47 → P-51',
+    callsign: 'WALLPAINT',
+    note: 'Solid green nose — uncommon Group color. Pairs unusually with OD body (green-on-green) for an unsettling effect.',
+    squadrons: [
+      { name: '368th FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'CV-' },
+      { name: '369th FS', rudder: '#F0BE0E', rudderName: 'Yellow', code: 'IV-' },
+      { name: '370th FS', rudder: '#2B5797', rudderName: 'Blue', code: 'CR-' },
+    ]
+  },
+  // Checker groups
+  {
+    id: 'fg-55', name: '55th FG', nickname: null,
+    pattern: 'checker', c1: '#BB1F2E', c2: '#1F5C28',
+    base: 'RAF Wormingford, Essex',
+    aircraft: 'P-38 → P-51',
+    callsign: 'SMALLBOY',
+    note: 'Red-and-green checker — striking holiday-themed nose pattern. Difficult to hand-paint but high visual impact.',
+    squadrons: [
+      { name: '38th FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'CG-' },
+      { name: '338th FS', rudder: '#1F5C28', rudderName: 'Green', code: 'CL-' },
+      { name: '343rd FS', rudder: '#F0BE0E', rudderName: 'Yellow', code: 'CY-' },
+    ]
+  },
+  {
+    id: 'fg-78', name: '78th FG', nickname: null,
+    pattern: 'checker', c1: '#1F1F1F', c2: '#F0EDE3',
+    base: 'RAF Duxford, Cambridgeshire',
+    aircraft: 'P-47 → P-51',
+    callsign: 'GRAYWALL',
+    note: 'Black-and-white checkers — extreme contrast. "Big Beautiful Doll" flew with this group.',
+    squadrons: [
+      { name: '82nd FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'MX-' },
+      { name: '83rd FS', rudder: '#F0EDE3', rudderName: 'White', code: 'HL-' },
+      { name: '84th FS', rudder: '#1F1F1F', rudderName: 'Black', code: 'WZ-' },
+    ]
+  },
+  {
+    id: 'fg-339', name: '339th FG', nickname: null,
+    pattern: 'checker', c1: '#BB1F2E', c2: '#F0EDE3',
+    base: 'RAF Fowlmere, Cambridgeshire',
+    aircraft: 'P-47 → P-51',
+    callsign: 'ARMSTRONG',
+    note: 'Red-and-white checkers. Classic candy-stripe look.',
+    squadrons: [
+      { name: '503rd FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'D7-' },
+      { name: '504th FS', rudder: '#1F5C28', rudderName: 'Green', code: '5Q-' },
+      { name: '505th FS', rudder: '#F0EDE3', rudderName: 'White', code: '6N-' },
+    ]
+  },
+  {
+    id: 'fg-353', name: '353rd FG', nickname: 'Slybirds',
+    pattern: 'checker', c1: '#1F1F1F', c2: '#F0BE0E',
+    base: 'RAF Raydon, Suffolk',
+    aircraft: 'P-47 → P-51',
+    callsign: 'JONAH',
+    note: 'Black-and-yellow checkers. Maximum Chaos-friendly palette — reads as "warning markings" and the squadron name "Slybirds" already sounds 40k.',
+    squadrons: [
+      { name: '350th FS', rudder: '#F0BE0E', rudderName: 'Yellow', code: 'LH-' },
+      { name: '351st FS', rudder: '#B6BABF', rudderName: 'Bare Metal', code: 'YJ-' },
+      { name: '352nd FS', rudder: '#1F1F1F', rudderName: 'Black', code: 'SX-' },
+    ]
+  },
+  {
+    id: 'fg-357', name: '357th FG', nickname: 'Yoxford Boys',
+    pattern: 'checker', c1: '#BB1F2E', c2: '#F0BE0E',
+    base: 'RAF Leiston, Suffolk',
+    aircraft: 'P-51',
+    callsign: 'DAILY / CEMENT / DRYDEN',
+    note: 'Red-Yellow-Red spinner + two rows of red/yellow checkers to the exhaust stacks. Home of Chuck Yeager, Bud Anderson, Kit Carson. Highest visual punch of any 8th AF nose scheme.',
+    squadrons: [
+      { name: '362nd FS', rudder: '#F0EDE3', rudderName: 'White', code: 'G4-' },
+      { name: '363rd FS', rudder: '#BB1F2E', rudderName: 'Red', code: 'B6-' },
+      { name: '364th FS', rudder: '#F0BE0E', rudderName: 'Yellow', code: 'C5-' },
+    ]
+  },
+  // Diamond / other
+  {
+    id: 'fg-356', name: '356th FG', nickname: null,
+    pattern: 'diamonds', c1: '#BB1F2E', c2: '#2B5797',
+    base: 'RAF Martlesham Heath, Suffolk',
+    aircraft: 'P-47 → P-51',
+    callsign: 'SOUNDWAVE',
+    note: 'Red-and-blue diamonds. Unique scheme — rotates the checker pattern 45° for a diamond grid. "Jersey Jerk" flew with this group.',
+    squadrons: [
+      { name: '359th FS', rudder: '#F0EDE3', rudderName: 'Trim', code: 'OC-' },
+      { name: '360th FS', rudder: '#F0EDE3', rudderName: 'Trim', code: 'PI-' },
+      { name: '361st FS', rudder: '#F0EDE3', rudderName: 'Trim', code: 'QI-' },
+    ]
+  },
+  // Stripe groups
+  {
+    id: 'fg-20', name: '20th FG', nickname: 'Loco Group',
+    pattern: 'vstripes', c1: '#1F1F1F', c2: '#F0EDE3',
+    base: "RAF King's Cliffe, Northamptonshire",
+    aircraft: 'P-38 → P-51',
+    callsign: 'DENTON',
+    note: 'Black-and-white vertical stripes. Squadron differentiated by geometric tail SHAPE (triangle/circle/square) rather than color.',
+    squadrons: [
+      { name: '55th FS', rudder: '#7E8487', rudderName: 'Triangle', code: 'KI-' },
+      { name: '77th FS', rudder: '#7E8487', rudderName: 'Circle', code: 'LC-' },
+      { name: '79th FS', rudder: '#7E8487', rudderName: 'Square', code: 'MC-' },
+    ]
+  },
+  {
+    id: 'fg-364', name: '364th FG', nickname: null,
+    pattern: 'vstripes', c1: '#2B5797', c2: '#F0EDE3',
+    base: 'RAF Honington, Suffolk',
+    aircraft: 'P-38 → P-51',
+    callsign: null,
+    note: 'Blue-and-white vertical stripes. "Babs in Arms" and "Rugged Rebel" flew with this group.',
+    squadrons: [
+      { name: '383rd FS', rudder: '#F0EDE3', rudderName: 'Trim', code: 'N2-' },
+      { name: '384th FS', rudder: '#F0EDE3', rudderName: 'Trim', code: '5Y-' },
+      { name: '385th FS', rudder: '#F0EDE3', rudderName: 'Trim', code: '5E-' },
+    ]
+  },
+  // No-color
+  {
+    id: 'fg-479', name: '479th FG', nickname: "Riddle's Raiders",
+    pattern: 'none', c1: '#B6BABF', c2: null,
+    base: 'RAF Wattisham, Suffolk',
+    aircraft: 'P-38 → P-51',
+    callsign: 'HIGHWAY',
+    note: 'No Group nose color. Squadron ID via geometric tail symbol (circle/triangle/square). The minimalist option — lets your OD body do all the talking.',
+    squadrons: [
+      { name: '434th FS', rudder: '#B6BABF', rudderName: 'Circle', code: 'L2-' },
+      { name: '435th FS', rudder: '#B6BABF', rudderName: 'Triangle', code: 'J2-' },
+      { name: '436th FS', rudder: '#B6BABF', rudderName: 'Square', code: '9B-' },
+    ]
+  },
+  // MTO
+  {
+    id: 'fg-332', name: '332nd FG', nickname: 'Red Tails / Tuskegee',
+    pattern: 'solid', c1: '#BB1F2E', c2: null,
+    base: 'Ramitelli, Italy (15th AF)',
+    aircraft: 'P-39 → P-47 → P-51',
+    callsign: 'MTO Theater',
+    note: 'Distinctive solid RED tail (entire empennage), red nose bands, yellow wing bands. Only all-Black fighter group. Remarkable escort record.',
+    squadrons: [
+      { name: '99th FS', rudder: '#2B5797', rudderName: 'Blue Trim', code: 'A00-A39' },
+      { name: '100th FS', rudder: '#1F1F1F', rudderName: 'Black Trim', code: '1-39' },
+      { name: '301st FS', rudder: '#F0EDE3', rudderName: 'White Trim', code: '40-69' },
+      { name: '302nd FS', rudder: '#F0BE0E', rudderName: 'Yellow Trim', code: '70-99' },
+    ]
+  },
+];
+
+// Squadron rudder colors (the palette of single colors used across all groups)
+const RUDDER_COLORS = [
+  {
+    id: 'rudder-red', name: 'Insignia Red', hex: '#BB1F2E',
+    tagline: 'Squadron Rudder — most common',
+    fs: 'FS 31136',
+    vallejo: '71.084 Model Air Fire Red · 70.926 Model Color Red',
+    citadel: 'Mephiston Red (base) · Evil Sunz Scarlet (mid)',
+    usage: 'Rudder on dozens of squadrons. For the Murderwings: helmet faceplate, chest aquila, knee panel, or shoulder pad rim.',
+    notes: 'A slightly orange-shifted red — not crimson, not fire engine. Closer to a vintage tomato/brick red.'
+  },
+  {
+    id: 'rudder-yellow', name: 'Insignia Yellow', hex: '#F0BE0E',
+    tagline: 'Squadron Rudder — high visibility',
+    fs: 'FS 33538',
+    vallejo: '71.078 Model Air Gold Yellow · 70.948 Model Color Gold Yellow',
+    citadel: 'Averland Sunset (base) · Yriel Yellow (mid)',
+    usage: 'Distinctive squadron color. Use on a helmet, kneepad, or single pauldron edge for the high-contrast pop.',
+    notes: 'Slightly warm/orange — not lemon yellow. Real WWII insignia yellow had a hint of orange-amber.'
+  },
+  {
+    id: 'rudder-blue', name: 'Insignia Blue', hex: '#2B5797',
+    tagline: 'Squadron Rudder — also Bodney Blue',
+    fs: 'FS 35044 (insignia) / 352nd FG approximation',
+    vallejo: '71.090 Model Air Blue Angels Blue · 70.925 Model Color Blue',
+    citadel: 'Macragge Blue (base) · Calgar Blue (mid)',
+    usage: 'Squadron rudder for ~half the groups. Also the famous "Bodney Blue" of the 352nd. Pairs unusually well with OD body.',
+    notes: 'Medium blue — not navy, not royal. Slightly desaturated compared to insignia roundel blue.'
+  },
+  {
+    id: 'rudder-white', name: 'Insignia White', hex: '#F0EDE3',
+    tagline: 'Squadron Rudder & Theater Bands',
+    fs: 'FS 37875',
+    vallejo: '71.001 Model Air White · 70.951 Model Color White',
+    citadel: 'White Scar (pure) · Ulthuan Grey (off-white)',
+    usage: 'Squadron color (335th, 83rd, 362nd, others). Also theater identification bands. Use slightly off-white to avoid the "fresh paint" look.',
+    notes: 'NEVER pure white in service — even fresh white insignia paint had a slight cream undertone, and field-aged white quickly turned ivory.'
+  },
+  {
+    id: 'rudder-black', name: 'Insignia Black', hex: '#1F1F1F',
+    tagline: 'Squadron Rudder & Theater Bands',
+    fs: 'FS 37038',
+    vallejo: '71.057 Model Air Black · 70.950 Model Color Black',
+    citadel: 'Abaddon Black (pure) · Eshin Grey (off-black)',
+    usage: 'Squadron color (84th, 352nd, etc.) and as the dark half of all checker schemes.',
+    notes: 'Pure black is rarely flattering on a mini. For squadron markings, use a very dark warm grey or near-black to avoid flatness. Real "insignia black" actually weathered to a warm dark grey.'
+  },
+  {
+    id: 'rudder-green', name: 'Insignia Green', hex: '#1F5C28',
+    tagline: 'Squadron Rudder — rare',
+    fs: 'FS 34108 (approximation)',
+    vallejo: '71.094 Model Air Green · 70.967 Model Color Olive Green',
+    citadel: 'Caliban Green (base) · Warpstone Glow (mid)',
+    usage: 'Used by 338th FS and 504th FS — distinctly darker and bluer than Medium Green camo color.',
+    notes: 'Easy to confuse with the OD body if used near it — keep them visually separated.'
+  },
+  {
+    id: 'rudder-bare', name: 'Natural Metal (Bare)', hex: '#B6BABF',
+    tagline: 'Squadron Rudder — late-war',
+    fs: 'No FS · Polished aluminum',
+    vallejo: '71.062 Model Air Aluminum · 70.997 Model Color Silver',
+    citadel: 'Leadbelcher (base) · Ironbreaker (highlight)',
+    usage: 'Used by 351st FS Slybirds and late-war "natural metal" aircraft that ditched paint to save weight. For the Murderwings: a "stripped-back" veteran pilot with unpainted armor panels.',
+    notes: 'Real bare aluminum has a slight green-grey cast, not the bright chrome that hobby paints often deliver. Tone it down.'
+  },
+];
+
+// Trim & detail colors
+const TRIM_COLORS = [
+  {
+    id: 'script-white', name: 'Nose Art Script White', hex: '#F5F0E3',
+    tagline: 'Pilot names & nose art',
+    fs: 'FS 37875 (off-white)',
+    vallejo: '70.918 Model Color Ivory · thin with matt medium',
+    citadel: 'Screaming Skull · Pallid Wych Flesh (cooler)',
+    usage: 'Script lettering for pilot names on left cowl. "Glamorous Glen," "Old Crow," etc. Hand-letter with a #00 brush.',
+    notes: 'Slightly creamy off-white reads as "painted-by-crew-chief" rather than decal-perfect. Embrace slight unevenness.'
+  },
+  {
+    id: 'script-red', name: 'Nose Art Script Red', hex: '#A8201A',
+    tagline: 'Pilot names on light noses',
+    fs: '~FS 31136 darkened',
+    vallejo: '70.926 Model Color Red · darken with brown',
+    citadel: 'Khorne Red',
+    usage: 'Alternative script color when over light-colored noses (yellow, white). Used on natural-metal aircraft and white-nosed birds.',
+    notes: 'Slightly darker than insignia red — high-contrast lettering didn\'t need the same vibrancy.'
+  },
+  {
+    id: 'kill-cross', name: 'Kill Mark — German Cross', hex: '#1F1F1F',
+    tagline: 'Balkenkreuz with white border',
+    fs: 'Insignia black + white',
+    vallejo: '71.057 Black + 71.001 White',
+    citadel: 'Abaddon Black on White Scar undercoat',
+    usage: 'Below cockpit on LEFT side of cowl. Stack in horizontal rows of 5-10. For the Murderwings: replace with Imperial Aquila kills or Marine helmet silhouettes.',
+    notes: 'Real WWII kill marks were 1-2 inches across — at miniature scale these become single-brush dots. Suggest the shape rather than detailing it.'
+  },
+  {
+    id: 'kill-japanese', name: 'Kill Mark — Hinomaru', hex: '#C8102E',
+    tagline: 'Japanese flag red disc',
+    fs: 'Insignia red',
+    vallejo: '71.084 Model Air Fire Red',
+    citadel: 'Mephiston Red',
+    usage: 'For Pacific-theater aces or for the Murderwings as a "rare prize" kill type. Solid red disc on white background.',
+    notes: 'Pacific-theater aircraft mostly. Use sparingly — most 8th AF pilots never claimed a Japanese kill.'
+  },
+  {
+    id: 'pinup-skin', name: 'Pinup Flesh Tone', hex: '#E5B895',
+    tagline: 'Vargas/Petty style nose art',
+    fs: 'N/A',
+    vallejo: '70.815 Model Color Basic Skintone',
+    citadel: 'Cadian Fleshtone · Kislev Flesh (highlight)',
+    usage: 'Pinup nose art (e.g., "Passion Wagon"). For the Murderwings: maybe a Slaaneshi twist, or a more Khornate "trophy of slain Sister" approach.',
+    notes: 'Period nose art used a warm peach tone with crisp highlights — not realistic flesh tones.'
+  },
+  {
+    id: 'pinup-lingerie', name: 'Pinup Highlight Red', hex: '#D32F2F',
+    tagline: 'Lingerie/lips/lipstick accent',
+    fs: 'N/A',
+    vallejo: '70.957 Model Color Flat Red',
+    citadel: 'Wild Rider Red',
+    usage: 'Pinup accents — lipstick, lingerie, heels. Saturates the eye on a small nose art panel.',
+    notes: 'Slightly more orange than insignia red — borrowed from cosmetic colors of the era.'
+  },
+  {
+    id: 'crewchief-stencil', name: 'Crew Chief Stencil', hex: '#F5F0E3',
+    tagline: 'Pilot/crew name plates',
+    fs: 'Insignia white',
+    vallejo: '70.918 Ivory',
+    citadel: 'Screaming Skull',
+    usage: 'Tiny stencilled lettering listing pilot, crew chief, armorer below cockpit. For the Murderwings: replace with Chaos pilot designation and Skull Champion nameplate.',
+    notes: 'In service these were usually stencilled rather than scripted — cleaner letterforms.'
+  },
+  {
+    id: 'invasion-white', name: 'Invasion Stripe White', hex: '#EDE8DA',
+    tagline: 'D-Day identification bands',
+    fs: 'Insignia white (field applied)',
+    vallejo: '70.918 Ivory · weather heavily',
+    citadel: 'Screaming Skull washed and chipped',
+    usage: 'Five alternating black/white bands applied 4 June 1944. Wings, fuselage. Removed in phases — upper surfaces gone by Aug 1944.',
+    notes: 'Field-applied with brushes and bad paint — these were ALWAYS uneven, weathered, and chipped. Don\'t make them too clean.'
+  },
+  {
+    id: 'invasion-black', name: 'Invasion Stripe Black', hex: '#222018',
+    tagline: 'D-Day identification bands',
+    fs: 'Insignia black (field applied)',
+    vallejo: '71.057 Black + brown wash',
+    citadel: 'Eshin Grey base, Nuln Oil wash',
+    usage: 'Alternates with invasion white. Same field-applied rough character.',
+    notes: 'Use warm dark brown-black rather than pure black to suggest the field-applied paint quality.'
+  },
+];
+
+// Weathering and effects
+const WEATHERING_COLORS = [
+  {
+    id: 'exhaust-soot', name: 'Exhaust Soot', hex: '#3A2E26',
+    tagline: 'Behind exhaust stacks',
+    fs: 'N/A',
+    vallejo: '70.822 Model Color German Black Brown · thin to glaze',
+    citadel: 'Skavenblight Dinge · Rhinox Hide mix',
+    usage: 'Streaking back from any exhaust/vent on the mini — backpack vents, weapon barrels, jump pack ports. Thin to a glaze and feather backward.',
+    notes: 'For the Murderwings as Raptors, JUMP PACK exhaust is the obvious application — this is the signature weathering color of the project.'
+  },
+  {
+    id: 'oil-stain', name: 'Oil Stain', hex: '#2B2620',
+    tagline: 'Engine leaks & lubricant',
+    fs: 'N/A',
+    vallejo: '71.077 Model Air Black Brown · gloss medium for sheen',
+    citadel: 'Nuln Oil Gloss · Mournfang Brown mix',
+    usage: 'Around engine cowling, gun ports, hinges. On the minis: armor joints, weapon mechanisms, vents. Add gloss medium for that "wet oil" look.',
+    notes: 'Real oil reads as near-black with a brown/green undertone — and it should be GLOSSY against matte paint.'
+  },
+  {
+    id: 'gun-blast', name: 'Gun Blast Staining', hex: '#5C4A3A',
+    tagline: 'Around wing gun ports',
+    fs: 'N/A',
+    vallejo: '71.075 Model Air Sand Brown',
+    citadel: 'Mournfang Brown · Skrag Brown highlight',
+    usage: 'Cordite residue from machine gun fire — streaks BACK from the muzzle. For the Murderwings: bolter muzzles, exhaust ports on guns.',
+    notes: 'Real WWII machine guns left a distinctive brown-tan residue, not black. Stipple it on patchily then drag back.'
+  },
+  {
+    id: 'chip-aluminum', name: 'Chipped Aluminum', hex: '#A8A9AD',
+    tagline: 'Paint-loss reveal',
+    fs: 'N/A',
+    vallejo: '71.062 Model Air Aluminum',
+    citadel: 'Leadbelcher (base) · Stormhost Silver (highlight)',
+    usage: 'Tiny chips and scratches revealing bare metal under the OD paint. Use a sponge or fine brush on high-wear points: edges, knees, knuckles.',
+    notes: 'Less is more. A handful of well-placed chips reads as veteran wear; covering a mini in chips reads as careless.'
+  },
+  {
+    id: 'rust-streak', name: 'Rust Streak', hex: '#7D3A1E',
+    tagline: 'Iron oxide from metal fittings',
+    fs: 'N/A',
+    vallejo: '70.985 Hull Red · thin to glaze',
+    citadel: 'Mournfang Brown · Trollslayer Orange highlight',
+    usage: 'Vertical streaks below bolts, rivets, panel screws on horizontal surfaces. On the minis: below visor rivets, below shoulder mounts.',
+    notes: 'Streak directly DOWN from the rust source — gravity dictates direction. Use a damp brush to feather and stop the streak naturally.'
+  },
+  {
+    id: 'dust-pigment', name: 'Field Dust', hex: '#B5A082',
+    tagline: 'Pigment on lower surfaces',
+    fs: 'N/A',
+    vallejo: '73.121 European Earth pigment',
+    citadel: 'Mournfang Brown drybrush · Ushabti Bone highlight',
+    usage: 'Boots, lower greaves, kneepads. Dry-brush or pigment over the OD base to suggest English airfield mud or French dust depending on stage of war.',
+    notes: 'Add varied tones — pure tan reads flat. Mix in a slightly cooler grey pigment for variation.'
+  },
+  {
+    id: 'blood-effect', name: 'Tactical Blood', hex: '#7A0F0F',
+    tagline: 'Citadel Blood for the Blood God',
+    fs: 'N/A — 40k convention',
+    vallejo: '70.926 Red · gloss medium · brown ink for darken',
+    citadel: 'Blood for the Blood God (technical paint)',
+    usage: 'The 40k half of the equation. Tactical-level (not gushing) blood on bolter blades, fists, chest plates. Combines with WWII oil/exhaust staining for the project signature look.',
+    notes: 'For Chaos Raptors, blood reads as authentic. Apply AFTER weathering — it sits on top of dust, not under it.'
+  },
+];
+
+/* ===================================================================
+   RENDERING
+   =================================================================== */
+
+function renderBaseGrid() {
+  const grid = document.getElementById('base-grid');
+  grid.innerHTML = BASE_COLORS.map(c => `
+    <div class="swatch" onclick="openModal('base', '${c.id}')">
+      <div class="swatch-color" style="background-color: ${c.hex};"></div>
+      <div class="swatch-body">
+        <div class="swatch-name">${c.name}</div>
+        <div class="swatch-meta">
+          <span class="hex">${c.hex}</span> · <span>${c.fs}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderGroupGrid(filter = 'all') {
+  const grid = document.getElementById('group-grid');
+  const visible = GROUPS.filter(g => {
+    if (filter === 'all') return true;
+    if (filter === 'solid') return g.pattern === 'solid';
+    if (filter === 'checker') return g.pattern === 'checker' || g.pattern === 'diamonds';
+    if (filter === 'stripe') return g.pattern === 'vstripes';
+    if (filter === 'other') return g.pattern === 'none';
+    return true;
+  });
+  grid.innerHTML = visible.map(g => `
+    <div class="group-card" onclick="openModal('group', '${g.id}')">
+      <div class="group-nose pattern-${g.pattern}" style="--c1: ${g.c1}; --c2: ${g.c2 || g.c1};"></div>
+      <div class="group-body">
+        <div class="group-name">${g.name}</div>
+        ${g.nickname ? `<div class="group-nickname">"${g.nickname}"</div>` : ''}
+        <div class="group-detail">
+          <span class="label">Base:</span> ${g.base}<br>
+          <span class="label">Aircraft:</span> ${g.aircraft}
+        </div>
+        <div class="group-squads">
+          ${g.squadrons.map(s => `
+            <span class="squad-chip"><span class="dot" style="background:${s.rudder}"></span>${s.name}</span>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderRudderGrid() {
+  const grid = document.getElementById('rudder-grid');
+  grid.innerHTML = RUDDER_COLORS.map(c => `
+    <div class="swatch tight" onclick="openModal('rudder', '${c.id}')">
+      <div class="swatch-color" style="background-color: ${c.hex};"></div>
+      <div class="swatch-body">
+        <div class="swatch-name">${c.name}</div>
+        <div class="swatch-meta">
+          <span class="hex">${c.hex}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderTrimGrid() {
+  const grid = document.getElementById('trim-grid');
+  grid.innerHTML = TRIM_COLORS.map(c => `
+    <div class="swatch tight" onclick="openModal('trim', '${c.id}')">
+      <div class="swatch-color" style="background-color: ${c.hex};"></div>
+      <div class="swatch-body">
+        <div class="swatch-name">${c.name}</div>
+        <div class="swatch-meta">
+          <span class="hex">${c.hex}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderWeatheringGrid() {
+  const grid = document.getElementById('weathering-grid');
+  grid.innerHTML = WEATHERING_COLORS.map(c => `
+    <div class="swatch tight" onclick="openModal('weathering', '${c.id}')">
+      <div class="swatch-color" style="background-color: ${c.hex};"></div>
+      <div class="swatch-body">
+        <div class="swatch-name">${c.name}</div>
+        <div class="swatch-meta">
+          <span class="hex">${c.hex}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===================================================================
+   MODAL
+   =================================================================== */
+
+function findById(type, id) {
+  if (type === 'base') return BASE_COLORS.find(c => c.id === id);
+  if (type === 'rudder') return RUDDER_COLORS.find(c => c.id === id);
+  if (type === 'trim') return TRIM_COLORS.find(c => c.id === id);
+  if (type === 'weathering') return WEATHERING_COLORS.find(c => c.id === id);
+  if (type === 'group') return GROUPS.find(c => c.id === id);
+  return null;
+}
+
+function openModal(type, id) {
+  const item = findById(type, id);
+  if (!item) return;
+
+  const colorBox = document.getElementById('modal-color');
+  const body = document.getElementById('modal-body');
+
+  if (type === 'group') {
+    // Render Group with pattern + full squadron detail
+    colorBox.className = 'modal-color pattern-' + item.pattern;
+    colorBox.style.setProperty('--c1', item.c1);
+    colorBox.style.setProperty('--c2', item.c2 || item.c1);
+    colorBox.style.backgroundColor = '';
+
+    body.innerHTML = `
+      <div class="modal-name">${item.name}${item.nickname ? '' : ''}</div>
+      ${item.nickname ? `<div class="modal-tagline">"${item.nickname}"</div>` : '<div class="modal-tagline">&nbsp;</div>'}
+      <div class="modal-row"><span class="label">Base</span><span class="value">${item.base}</span></div>
+      <div class="modal-row"><span class="label">Aircraft</span><span class="value">${item.aircraft}</span></div>
+      <div class="modal-row"><span class="label">Callsign</span><span class="value">${item.callsign || '—'}</span></div>
+      <div class="modal-row"><span class="label">Pattern</span><span class="value">${prettyPattern(item.pattern)} — <span class="mono">${item.c1}</span>${item.c2 ? ' + <span class="mono">' + item.c2 + '</span>' : ''}</span></div>
+      <div class="modal-row"><span class="label">Squadrons</span><span class="value">${item.squadrons.map(s => `
+        <div style="display:flex;align-items:center;gap:6px;padding:3px 0">
+          <span style="width:14px;height:14px;border:1px solid #555;background:${s.rudder};display:inline-block;flex-shrink:0"></span>
+          <strong>${s.name}</strong> · ${s.rudderName} · <span class="mono">${s.code}</span>
+        </div>
+      `).join('')}</span></div>
+      <div class="modal-row"><span class="label">Notes</span><span class="value">${item.note}</span></div>
+      <div class="modal-actions">
+        <button class="modal-btn" onclick="addGroupColorsToTray('${item.id}')">★ Add Group Colors to Compare</button>
+        <button class="modal-btn secondary" onclick="closeModal()">Close</button>
+      </div>
+    `;
+  } else {
+    colorBox.className = 'modal-color';
+    colorBox.style.backgroundColor = item.hex;
+    colorBox.style.removeProperty('--c1');
+    colorBox.style.removeProperty('--c2');
+
+    body.innerHTML = `
+      <div class="modal-name">${item.name}</div>
+      <div class="modal-tagline">${item.tagline}</div>
+      <div class="modal-row"><span class="label">Hex</span><span class="value"><span class="mono">${item.hex}</span></span></div>
+      <div class="modal-row"><span class="label">FS Code</span><span class="value">${item.fs}</span></div>
+      ${item.spec ? `<div class="modal-row"><span class="label">Spec</span><span class="value">${item.spec}</span></div>` : ''}
+      <div class="modal-row"><span class="label">Vallejo</span><span class="value">${item.vallejo}</span></div>
+      <div class="modal-row"><span class="label">Citadel</span><span class="value">${item.citadel}</span></div>
+      <div class="modal-row"><span class="label">Usage</span><span class="value">${item.usage}</span></div>
+      ${item.notes ? `<div class="modal-row"><span class="label">Notes</span><span class="value">${item.notes}</span></div>` : ''}
+      <div class="modal-actions">
+        <button class="modal-btn" onclick="addToTray('${type}', '${item.id}')">★ Add to Compare</button>
+        <button class="modal-btn secondary" onclick="closeModal()">Close</button>
+      </div>
+    `;
+  }
+
+  document.getElementById('modal-backdrop').classList.add('active');
+}
+
+function prettyPattern(p) {
+  return { solid: 'Solid Color', checker: 'Checkerboard', vstripes: 'Vertical Stripes',
+           diamonds: 'Diamond Grid', none: 'No Group Color (tail symbol)' }[p] || p;
+}
+
+function closeModal(e) {
+  if (e && e.target.id !== 'modal-backdrop' && e.type === 'click') return;
+  document.getElementById('modal-backdrop').classList.remove('active');
+}
+
+/* ===================================================================
+   COMPARISON TRAY
+   =================================================================== */
+
+let tray = [];
+
+function addToTray(type, id) {
+  const item = findById(type, id);
+  if (!item) return;
+  const key = `${type}-${id}`;
+  if (tray.find(t => t.key === key)) {
+    closeModal();
+    return;
+  }
+  tray.push({ key, name: item.name, hex: item.hex, type });
+  renderTray();
+  closeModal();
+}
+
+function addGroupColorsToTray(groupId) {
+  const g = GROUPS.find(x => x.id === groupId);
+  if (!g) return;
+  const items = [
+    { key: `group-${g.id}-c1`, name: `${g.name} Nose (Primary)`, hex: g.c1, type: 'group' },
+  ];
+  if (g.c2 && g.c2 !== g.c1) {
+    items.push({ key: `group-${g.id}-c2`, name: `${g.name} Nose (Secondary)`, hex: g.c2, type: 'group' });
+  }
+  g.squadrons.forEach(s => {
+    items.push({ key: `group-${g.id}-${s.name}`, name: `${s.name} (${s.rudderName})`, hex: s.rudder, type: 'group' });
+  });
+  items.forEach(item => {
+    if (!tray.find(t => t.key === item.key)) tray.push(item);
+  });
+  renderTray();
+  closeModal();
+}
+
+function removeFromTray(key) {
+  tray = tray.filter(t => t.key !== key);
+  renderTray();
+}
+
+function clearTray() {
+  tray = [];
+  renderTray();
+}
+
+function renderTray() {
+  const trayEl = document.getElementById('tray');
+  const items = document.getElementById('tray-items');
+  const count = document.getElementById('tray-count');
+
+  count.textContent = tray.length;
+
+  if (tray.length === 0) {
+    trayEl.classList.add('empty');
+    items.innerHTML = '<div class="tray-empty-msg">No colors selected. Click any swatch, then ★ Add to Compare in the popup.</div>';
+    return;
+  }
+
+  trayEl.classList.remove('empty');
+  items.innerHTML = tray.map(t => `
+    <div class="tray-item">
+      <div class="tray-item-color" style="background-color: ${t.hex};">
+        <button class="tray-item-remove" onclick="removeFromTray('${t.key}')" title="Remove">×</button>
+      </div>
+      <div class="tray-item-body">
+        <div class="tray-item-name">${t.name}</div>
+        <div class="tray-item-hex">${t.hex}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ===================================================================
+   FILTERS
+   =================================================================== */
+
+document.querySelectorAll('#group-filters .filter-pill').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#group-filters .filter-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGroupGrid(btn.dataset.filter);
+  });
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* ===================================================================
+   INIT
+   =================================================================== */
+
+renderBaseGrid();
+renderGroupGrid();
+renderRudderGrid();
+renderTrimGrid();
+renderWeatheringGrid();
+renderTray();
+</script>
+
+</body>
+</html>
