@@ -53,8 +53,12 @@ Other subcommands:
    - Brand preference: Citadel only, Vallejo only, both. Default both.
      If they prefer Vallejo Model Air specifically, use brand_filter
      `["vallejo_model_air"]`.
-   - Paints already owned: prompt for a list; map names against
-     `data/paints.csv` if needed (case-insensitive lookup is fine).
+   - Paints already owned: **first read `inventory.md` at the repo root
+     if it exists** and use it as the default owned list. Confirm with
+     the user before passing names to the CLI — only include paints
+     whose names exist in `data/paints.csv`, since names from other
+     brands won't match and will be silently ignored. If the user
+     wants to add or remove from inventory.md, edit it directly.
    - Tolerance: default 5.0 ΔE2000. Translate for the user:
      "high confidence" (< 2.5), "medium" (< 5), "low" (≥ 5).
    - Max paints: default 12.
