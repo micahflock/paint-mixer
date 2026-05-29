@@ -113,6 +113,7 @@ NON_PAINT_KEYWORDS = (
 )
 METAL_NAME_KEYWORDS = (
     "metallic ",
+    " metal ",        # e.g. "Plate Mail Metal", "Old Iron Metal"
     " silver",
     " gold",
     " bronze",
@@ -151,6 +152,39 @@ VALLEJO_EXCLUDE_KEYWORDS = (
     "fluorescent",
     "uv ",
     "phosphor",
+)
+
+# Army Painter "Set" -> (line, category). The Warpaints Fanatic line is the
+# current main range; older "Warpaints" was rebranded into Fanatic but the
+# upstream still lists both.
+ARMY_PAINTER_SET_MAP = {
+    "Warpaints Fanatic":                ("army_painter_fanatic", "solid"),
+    "Warpaints":                        ("army_painter_warpaints", "solid"),
+    "Warpaints Air":                    ("army_painter_air", "solid"),
+    "Warpaints Wash":                   ("army_painter_wash", "wash"),
+    "Warpaints Tone":                   ("army_painter_tone", "wash"),
+    "Warpaints Fanatic Wash":           ("army_painter_fanatic_wash", "wash"),
+    "Warpaints Primer":                 ("army_painter_primer", "exclude"),
+    "Speedpaint Set":                   ("army_painter_speedpaint", "contrast"),
+    "Speedpaint Set 2.0":               ("army_painter_speedpaint", "contrast"),
+    "Quickshade Washes Set":            ("army_painter_quickshade", "wash"),
+    "Metallic Colours Paint Set":       ("army_painter_metallic", "metallic"),
+    "Skin Tones Paint Set":             ("army_painter_skintones", "solid"),
+    "Skin Tones Paint Set - Washes":    ("army_painter_skintones_wash", "wash"),
+    "D&D Nolzur's Marvelous Pigments":          ("army_painter_dnd", "solid"),
+    "D&D Nolzur's Marvelous Pigments Primer":   ("army_painter_dnd_primer", "exclude"),
+    "D&D Nolzur's Marvelous Pigments Wash":     ("army_painter_dnd_wash", "wash"),
+    "D&D Undead Set":                   ("army_painter_dnd", "solid"),
+    "D&D Underdark Set":                ("army_painter_dnd", "solid"),
+}
+
+# Effect/glow keywords (translucent fluorescents). Applies across brands now
+# that Army Painter has fluorescent "glow" paints in the regular range.
+EFFECT_KEYWORDS = (
+    "glow",
+    "fluor",
+    "phosphor",
+    "uv ",
 )
 
 
@@ -197,12 +231,14 @@ def parse_md(path: Path, brand: str, set_map: dict[str, tuple[str, str]]) -> lis
         # Hard excludes by name (mediums, varnishes, translucent "clears")
         if any(kw in lname for kw in NON_PAINT_KEYWORDS):
             category = "exclude"
-        # Metallic overrides
+        # Metallic / effect overrides
         if category == "solid":
             if brand == "citadel" and name in CITADEL_METALLICS:
                 category = "metallic"
             elif any(kw in (" " + lname + " ") for kw in METAL_NAME_KEYWORDS):
                 category = "metallic"
+            elif any(kw in lname for kw in EFFECT_KEYWORDS):
+                category = "exclude"  # fluorescent / glow paints are translucent
             elif brand == "vallejo" and any(kw in lname for kw in VALLEJO_EXCLUDE_KEYWORDS):
                 category = "exclude"
 
@@ -236,6 +272,14 @@ def dedupe(rows: list[dict]) -> list[dict]:
         "vallejo_panzer_aces": 2,
         "vallejo_premium_air": 3,
         "citadel_air": 4,
+        # Army Painter: Warpaints Fanatic is the current main range; the
+        # older "Warpaints" line has different hex for some shared names.
+        "army_painter_fanatic": 0,
+        "army_painter_warpaints": 1,
+        "army_painter_air": 2,
+        "army_painter_dnd": 3,
+        "army_painter_skintones": 3,
+        "army_painter_speedpaint": 4,
     }
     best: dict[tuple[str, str], dict] = {}
     for row in rows:
@@ -250,12 +294,19 @@ def dedupe(rows: list[dict]) -> list[dict]:
 
 
 def main(argv: list[str]) -> int:
-    if len(argv) != 3:
-        print("usage: build_paint_db.py <citadel.md> <vallejo.md>", file=sys.stderr)
+    if len(argv) < 3:
+        print(
+            "usage: build_paint_db.py <citadel.md> <vallejo.md> [army_painter.md]",
+            file=sys.stderr,
+        )
         return 2
     citadel = parse_md(Path(argv[1]), "citadel", CITADEL_SET_MAP)
     vallejo = parse_md(Path(argv[2]), "vallejo", VALLEJO_SET_MAP)
-    rows = dedupe(citadel + vallejo)
+    all_rows = citadel + vallejo
+    if len(argv) >= 4:
+        army_painter = parse_md(Path(argv[3]), "army_painter", ARMY_PAINTER_SET_MAP)
+        all_rows += army_painter
+    rows = dedupe(all_rows)
     rows.sort(key=lambda r: (r["brand"], r["line"], r["name"]))
 
     out = Path(__file__).resolve().parent.parent / "data" / "paints.csv"
