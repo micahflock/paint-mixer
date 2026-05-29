@@ -100,6 +100,15 @@ def filter_paints(
 
     Owned paints are always candidates (free in the cover problem) regardless
     of brand_filter. Candidate pool is brand-filtered, deduplicated by name.
+
+    FIXME: paint identity here (and throughout the optimizer + CLI) is the
+    bare `name` string. Adding Army Painter introduced cross-brand name
+    collisions (e.g. "Ultramarine Blue" exists in both vallejo and
+    army_painter at different hex), and last-write-wins on the by-name
+    dict can silently pick the wrong Paint. The planned refactor moves
+    to a globally-unique identity (brand:name) and accepts a structured
+    {"name", "brand"} form in already_owned. See the xfail test
+    tests/test_db.py::test_filter_paints_colliding_name_should_disambiguate.
     """
     by_name = {p.name: p for p in paints}
     owned: list[Paint] = []

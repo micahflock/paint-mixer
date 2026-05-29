@@ -42,3 +42,36 @@ def test_metallics_and_washes_excluded_from_solids():
     # A few well-known metallics that should NOT be in the solid pool.
     for excluded in ("Leadbelcher", "Retributor Armour", "Auric Armour Gold"):
         assert excluded not in names, f"{excluded} should be excluded as metallic"
+
+
+@pytest.mark.xfail(
+    reason=(
+        "Cross-brand name collisions are not disambiguated yet. filter_paints "
+        "and downstream code key paints by bare name. Planned refactor: "
+        "globally-unique paint identity (brand:name) + structured "
+        '{"name","brand"} form in already_owned. Remove this marker once '
+        "filter_paints either raises on ambiguous bare names or accepts the "
+        "structured form."
+    ),
+    strict=True,
+)
+def test_filter_paints_colliding_name_should_disambiguate():
+    """Regression target for the name-collision bug introduced by Army Painter.
+
+    Two brands ship a paint called "Ultramarine Blue" at meaningfully
+    different hex values. A user passing the bare name as already_owned
+    should either get the brand they specified (structured form) or an
+    error (bare-name form), never a silent last-write-wins pick.
+    """
+    paints = load_paints()
+    colliders = [p for p in paints if p.name == "Ultramarine Blue"]
+    # Sanity: the collision actually exists in the current DB.
+    assert len({p.brand for p in colliders}) >= 2, (
+        "expected 'Ultramarine Blue' to exist in multiple brands; if this "
+        "preamble assertion fails, the DB changed and this test should be "
+        "re-targeted at whatever collision still exists"
+    )
+
+    # Desired behavior: bare ambiguous name raises (forcing user to disambiguate).
+    with pytest.raises(ValueError, match="ambiguous|disambiguate|multiple"):
+        filter_paints(paints, already_owned=["Ultramarine Blue"])
