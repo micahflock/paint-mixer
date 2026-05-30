@@ -176,7 +176,7 @@ def test_cli_smoke_via_subprocess():
         "tolerance_delta_e": 5.0,
     }
     proc = subprocess.run(
-        [sys.executable, "-m", "palette_optimizer.cli", "optimize"],
+        [sys.executable, "-m", "palette_optimizer.cli", "optimize", "--no-save"],
         input=json.dumps(payload),
         capture_output=True,
         text=True,
@@ -185,6 +185,36 @@ def test_cli_smoke_via_subprocess():
     assert proc.returncode == 0, proc.stderr
     out = json.loads(proc.stdout)
     assert out["summary"]["targets_total"] == 1
+
+
+def test_cli_optimize_saves_run(tmp_path):
+    """optimize persists a self-contained {input, result} record to --output-dir."""
+    payload = {
+        "targets": [{"name": "Test", "hex": "#BB1F2E"}],
+        "brand_filter": ["citadel"],
+        "max_paints": 4,
+        "tolerance_delta_e": 5.0,
+    }
+    proc = subprocess.run(
+        [
+            sys.executable, "-m", "palette_optimizer.cli", "optimize",
+            "--output-dir", str(tmp_path),
+        ],
+        input=json.dumps(payload),
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    assert proc.returncode == 0, proc.stderr
+    saved = list(tmp_path.glob("optimize-*.json"))
+    assert len(saved) == 1, f"expected one saved run, found {saved}"
+    record = json.loads(saved[0].read_text())
+    assert record["input"]["targets"][0]["hex"] == "#BB1F2E"
+    assert record["result"]["summary"]["targets_total"] == 1
+    assert "generated_at" in record
+    # stdout stays pure JSON; the save notice goes to stderr.
+    assert "saved run to" in proc.stderr
+    assert json.loads(proc.stdout)["summary"]["targets_total"] == 1
 
 
 def test_cli_validate_db_subcommand():

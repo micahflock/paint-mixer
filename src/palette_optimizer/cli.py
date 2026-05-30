@@ -34,6 +34,12 @@ in brand_filter to opt that one line back in. Owned air paints stay usable.
 
 Output schema (optimize): see README and docstring of `run_optimize`.
 
+Every `optimize` run also persists a self-contained record to
+`runs/optimize-<timestamp>.json` at the project root (override with
+--output-dir, disable with --no-save). The saved file wraps the input and
+result together so a run can be referenced or reproduced later; stdout
+still carries the bare result JSON for the skill layer to parse.
+
 Errors exit nonzero with a structured JSON object on stderr:
     {"error": {"code": "...", "message": "..."}}
 """
@@ -43,7 +49,13 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from datetime import datetime
 from pathlib import Path
+
+# Project root (…/paint-mixer), mirroring db.DEFAULT_CSV's anchoring. Runs are
+# saved here by default so they land in the project regardless of cwd.
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+DEFAULT_RUNS_DIR = PROJECT_ROOT / "runs"
 
 from .color import hex_to_lab, parse_hex
 from .db import _index_paints, filter_paints, load_paints, resolve_paint_ref, validate_db
@@ -216,7 +228,11 @@ def _unreachable_dict(
         "closest_delta_e": round(blend.delta_e, 2) if blend else None,
         "closest_blend": (
             [
-                {"paint": by_id[pid].name if pid in by_id else pid, "ratio": round(r, 3)}
+                {
+                    "paint": by_id[pid].name if pid in by_id else pid,
+                    "ratio": round(r, 3),
+                    "hex": by_id[pid].hex if pid in by_id else None,
+                }
                 for pid, r in zip(blend.paint_ids, blend.ratios, strict=True)
             ]
             if blend else None
@@ -226,12 +242,42 @@ def _unreachable_dict(
     }
 
 
+def _save_run(payload: dict, result: dict, output_dir: Path) -> Path:
+    """Persist a self-contained record of an optimize run.
+
+    Writes {generated_at, input, result} so each file documents both what
+    was asked for and what came back. Filenames are timestamped; a counter
+    suffix keeps sub-second runs from clobbering each other.
+    """
+    output_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    path = output_dir / f"optimize-{stamp}.json"
+    n = 1
+    while path.exists():
+        path = output_dir / f"optimize-{stamp}-{n}.json"
+        n += 1
+    record = {
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "input": payload,
+        "result": result,
+    }
+    with path.open("w") as f:
+        json.dump(record, f, indent=2)
+        f.write("\n")
+    return path
+
+
 def cmd_optimize(args: argparse.Namespace) -> int:
     payload = _load_input(args)
     db_path = Path(args.paint_db) if args.paint_db else None
     result = run_optimize(payload, db_path)
     json.dump(result, sys.stdout, indent=2)
     sys.stdout.write("\n")
+    if not args.no_save:
+        out_dir = Path(args.output_dir) if args.output_dir else DEFAULT_RUNS_DIR
+        saved = _save_run(payload, result, out_dir)
+        # stderr keeps stdout pure JSON for the skill layer to parse.
+        print(f"saved run to {saved}", file=sys.stderr)
     return 0
 
 
@@ -308,6 +354,13 @@ def build_parser() -> argparse.ArgumentParser:
 
     p_opt = sub.add_parser("optimize", help="Recommend paints and recipes")
     p_opt.add_argument("--input", help="Path to input JSON (default: stdin)")
+    p_opt.add_argument(
+        "--output-dir",
+        help=f"Directory to save the run JSON (default: {DEFAULT_RUNS_DIR})",
+    )
+    p_opt.add_argument(
+        "--no-save", action="store_true", help="Don't persist the run JSON to disk"
+    )
     p_opt.set_defaults(func=cmd_optimize)
 
     p_val = sub.add_parser("validate-db", help="Sanity-check the paint database")

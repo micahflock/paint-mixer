@@ -90,16 +90,30 @@ Other subcommands:
    ```
    uv run palette-optimizer optimize --input /tmp/palette_<random>.json
    ```
-   Parse the stdout JSON.
+   Parse the stdout JSON. Each run is also auto-saved to
+   `runs/optimize-<timestamp>.json` at the repo root (the path is printed
+   on stderr). `runs/` is tracked in git, so to make the run persist
+   across web sessions, commit and push the new file right after the run:
+   `git add runs/ && git commit -m "Save palette run <timestamp>" && git
+   push`. Mention the saved path so the user can reference the run later;
+   earlier runs in `runs/` are how you "continue from last session" —
+   read the most recent `runs/optimize-*.json` to recover the input
+   palette and constraints.
 
-6. **Present results in plain language.** Render:
+6. **Present results in plain language.** Wrap the whole rendered result
+   in a single fenced code block (```text) so the user can copy-paste it
+   back into a Claude conversation with the monospace alignment intact.
+   Inside that block, render:
    - **Purchase list:** name, brand/line, hex. Group by brand. Airbrush
      paints are excluded from recommendations by default, so they won't
      appear here unless the user opted them back in.
-   - **Recipes:** one line per target. Format like:
-     `Insignia Red (#BB1F2E) → 70% Mephiston Red + 30% Abaddon Black  [ΔE 2.3, high]`
+   - **Recipes:** one line per target, grouped under the category headers
+     from the palette. Show a hex for the target *and* for every paint in
+     the recipe (the optimizer JSON carries `hex` on each `blend` entry —
+     use it, don't invent it). Format like:
+     `Insignia Red  #BB1F2E → 70% Mephiston Red (#9A1115) + 30% Abaddon Black (#231F20)  [ΔE 2.3, very close · high]`
      ΔE in plain words: "match" (<1), "very close" (<2.5),
-     "close" (<5), "noticeable" (≥5). Confidence in parentheses.
+     "close" (<5), "noticeable" (≥5), followed by `· <confidence>`.
    - **Unreachable:** list with the closest achievable ΔE and the
      reason. Suggest options: raise tolerance, add an extra paint slot,
      or relax brand filter.
@@ -117,8 +131,16 @@ Other subcommands:
 ## Output formatting
 
 - Don't dump raw JSON unless the user asks for it.
-- Always show hex codes alongside paint names; the user reads in hex.
-- Use compact tables in monospace markdown; the UI renders monospace.
+- Wrap the final results (purchase list + recipes + unreachable) in one
+  fenced code block so the user can cleanly paste the output straight
+  into a Claude conversation. Don't bury it in prose or split it across
+  multiple blocks.
+- Always show hex codes alongside paint names — for the target color and
+  for every paint in each recipe. The user reads in hex, and the recipe
+  hexes let them eyeball the mix. Pull them from the optimizer JSON
+  (`target.hex` and each `blend[].hex`); never guess a hex.
+- Use compact tables in monospace; align columns so the block reads
+  cleanly as plain text.
 - Highlight ΔE in plain words, never just numbers.
 
 ## Errors
