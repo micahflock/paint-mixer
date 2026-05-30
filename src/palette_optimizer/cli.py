@@ -216,7 +216,11 @@ def _unreachable_dict(
         "closest_delta_e": round(blend.delta_e, 2) if blend else None,
         "closest_blend": (
             [
-                {"paint": by_id[pid].name if pid in by_id else pid, "ratio": round(r, 3)}
+                {
+                    "paint": by_id[pid].name if pid in by_id else pid,
+                    "ratio": round(r, 3),
+                    "hex": by_id[pid].hex if pid in by_id else None,
+                }
                 for pid, r in zip(blend.paint_ids, blend.ratios, strict=True)
             ]
             if blend else None
