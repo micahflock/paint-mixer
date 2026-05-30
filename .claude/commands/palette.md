@@ -92,9 +92,13 @@ Other subcommands:
    ```
    Parse the stdout JSON. Each run is also auto-saved to
    `runs/optimize-<timestamp>.json` at the repo root (the path is printed
-   on stderr). Mention that saved path so the user can reference the run
-   later; earlier runs in `runs/` are how you "continue from last
-   session."
+   on stderr). `runs/` is tracked in git, so to make the run persist
+   across web sessions, commit and push the new file right after the run:
+   `git add runs/ && git commit -m "Save palette run <timestamp>" && git
+   push`. Mention the saved path so the user can reference the run later;
+   earlier runs in `runs/` are how you "continue from last session" —
+   read the most recent `runs/optimize-*.json` to recover the input
+   palette and constraints.
 
 6. **Present results in plain language.** Wrap the whole rendered result
    in a single fenced code block (```text) so the user can copy-paste it

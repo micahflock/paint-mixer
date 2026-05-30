@@ -10,6 +10,3 @@ build/
 .DS_Store
 *.swp
 uv.lock
-
-# Saved optimizer runs (generated artifacts)
-runs/
