@@ -90,7 +90,11 @@ Other subcommands:
    ```
    uv run palette-optimizer optimize --input /tmp/palette_<random>.json
    ```
-   Parse the stdout JSON.
+   Parse the stdout JSON. Each run is also auto-saved to
+   `runs/optimize-<timestamp>.json` at the repo root (the path is printed
+   on stderr). Mention that saved path so the user can reference the run
+   later; earlier runs in `runs/` are how you "continue from last
+   session."
 
 6. **Present results in plain language.** Wrap the whole rendered result
    in a single fenced code block (```text) so the user can copy-paste it
