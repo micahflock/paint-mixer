@@ -109,6 +109,34 @@ def test_bare_ambiguous_owned_name_errors_end_to_end(paints):
         })
 
 
+def test_max_paints_counts_new_paints_only(paints):
+    """max_paints budgets NEW purchases only; owned paints are free and must
+    not consume the budget. With more owned paints than max_paints, the
+    optimizer must still be able to buy up to max_paints new ones."""
+    # Three owned paints unrelated to a red target (structured, citadel).
+    owned = [
+        {"name": n, "brand": "citadel"}
+        for n in ("Macragge Blue", "Abaddon Black", "White Scar")
+    ]
+    tgt = next(p for p in paints if p.name == "Mephiston Red")
+    out = run_optimize({
+        "targets": [{"name": "Brick", "hex": tgt.hex}],
+        "already_owned": owned,
+        "brand_filter": ["citadel"],
+        "max_paints": 1,
+        "tolerance_delta_e": 5.0,
+    })
+    # Owned (3) exceed max_paints (1). Under the old "total cap" semantics the
+    # budget would be exhausted (1 - 3 < 0) and the target missed. New
+    # semantics: one new buy is allowed, so the target is hit.
+    assert out["summary"]["targets_hit"] == 1
+    assert out["summary"]["paints_to_buy"] == 1
+    assert out["summary"]["paints_to_buy"] <= 1  # never exceeds max_paints
+    # Total recommended pool still includes the free owned paints.
+    assert out["summary"]["paints_recommended"] == 4
+    assert out["summary"]["paints_already_owned"] == 3
+
+
 def test_unreachable_target_is_reported(paints):
     """Targets impossible to reach (e.g. fluorescent magenta with citadel-only)
     should appear in the unreachable list with a closest_delta_e and a reason."""

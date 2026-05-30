@@ -9,9 +9,10 @@ Two-stage problem:
    target are retained so the cover step can pick the best blend whose
    components are all in the chosen pool.
 
-2. Choose a minimum subset of paints (≤ max_paints) such that every
-   target has at least one retained blend within tolerance whose
-   components all come from the subset. Greedy.
+2. Choose a minimum set of *new* paints to buy (≤ max_paints) such that,
+   together with any already-owned paints (which are free and not counted
+   against max_paints), every target has at least one retained blend within
+   tolerance whose components all come from the resulting pool. Greedy.
 
 Blend enumeration is vectorized: all candidate blend Lab values are
 stacked into one (N, 3) array and ΔE2000 is computed against the target
@@ -247,6 +248,9 @@ def greedy_set_cover(
     owned: set[str],
 ) -> set[str]:
     # `candidate_ids` and `owned` are globally-unique Paint.id values.
+    # `max_paints` caps NEW paints only: owned paints are free (already in
+    # the pool) and never consume a slot, so the returned pool may contain
+    # up to len(owned) + max_paints paints.
     pool: set[str] = set(owned)
     covered: set[int] = set()
 
@@ -258,7 +262,7 @@ def greedy_set_cover(
                 covered.add(i)
 
     refresh_covered()
-    slots = max_paints - len(pool)
+    slots = max_paints  # new-paint budget; owned are free and excluded
 
     while slots > 0 and len(covered) < len(targets):
         best_id: str | None = None

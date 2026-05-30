@@ -78,7 +78,9 @@ Other subcommands:
      from inventory.md, edit it directly.
    - Tolerance: default 5.0 ΔE2000. Translate for the user:
      "high confidence" (< 2.5), "medium" (< 5), "low" (≥ 5).
-   - Max paints: default 12.
+   - Max paints: default 12. This caps *new* paints to buy — already-owned
+     paints are free and don't count against it. So "12" means "buy up to
+     12 new paints," however many the user already owns.
 
 4. **Show the assembled palette and constraints once before running.**
    Compact format, no raw JSON. Wait for a "yes" / corrections.

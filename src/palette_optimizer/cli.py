@@ -15,6 +15,12 @@ Input schema (optimize):
         "max_paints_per_recipe": 3
     }
 
+`max_paints` is the budget of *new* paints to buy. Already-owned paints are
+free and do NOT count against it, so the total recommended pool may exceed
+max_paints (it can be up to len(already_owned) + max_paints). The output
+summary reports `paints_to_buy` (capped by max_paints) separately from
+`paints_recommended` (the full pool including owned).
+
 Each `already_owned` item is either a bare name string (resolved only when
 that name is globally unique across the paint DB) or a structured
 {"name": "...", "brand": "..."} object. The structured form disambiguates
