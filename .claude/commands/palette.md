@@ -93,9 +93,9 @@ Other subcommands:
    Parse the stdout JSON.
 
 6. **Present results in plain language.** Render:
-   - **Purchase list:** name, brand/line, hex. Group by brand. Call
-     attention if any are Vallejo Model Air (handles differently from
-     Model Color).
+   - **Purchase list:** name, brand/line, hex. Group by brand. Airbrush
+     paints are excluded from recommendations by default, so they won't
+     appear here unless the user opted them back in.
    - **Recipes:** one line per target. Format like:
      `Insignia Red (#BB1F2E) → 70% Mephiston Red + 30% Abaddon Black  [ΔE 2.3, high]`
      ΔE in plain words: "match" (<1), "very close" (<2.5),

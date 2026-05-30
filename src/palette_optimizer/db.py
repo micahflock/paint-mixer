@@ -159,11 +159,21 @@ def resolve_paint_ref(
     return matches[0] if matches else None
 
 
+def _is_air_line(line: str) -> bool:
+    """True for airbrush paint lines (e.g. vallejo_model_air, citadel_air).
+
+    Air paints are thinned for spraying and handle differently from brush
+    paints, so they're excluded from recommendations by default.
+    """
+    return "air" in line.split("_")
+
+
 def filter_paints(
     paints: list[Paint],
     *,
     brand_filter: list[str] | None = None,
     already_owned: list[str | dict] | None = None,
+    exclude_air: bool = True,
 ) -> tuple[list[Paint], list[Paint]]:
     """Return (candidate pool, owned pool) given user constraints.
 
@@ -178,6 +188,12 @@ def filter_paints(
     the name is unique across the DB) or a {"name", "brand"} dict that
     always disambiguates. An ambiguous bare name raises ValueError. See
     resolve_paint_ref.
+
+    With `exclude_air=True` (default), airbrush-line paints are dropped from
+    the candidate pool so they are never recommended for purchase or used in
+    recipes. Two carve-outs: a paint is kept if its exact air line is named
+    in `brand_filter` (explicit opt-in), and owned air paints stay usable
+    (they're re-added below as free candidates).
     """
     by_id, by_name = _index_paints(paints)
     owned: list[Paint] = []
@@ -193,8 +209,16 @@ def filter_paints(
             if p.brand in wanted or p.line in wanted
         ]
     else:
+        wanted = set()
         candidates = list(paints)
+    if exclude_air:
+        # Keep an air paint only when its exact line was explicitly requested.
+        candidates = [
+            p for p in candidates
+            if not _is_air_line(p.line) or p.line in wanted
+        ]
     # Ensure owned are in the candidate list (keyed on identity, not name).
+    # This also re-admits owned air paints dropped just above.
     cand_ids = {p.id for p in candidates}
     for p in owned:
         if p.id not in cand_ids:

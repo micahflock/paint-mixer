@@ -27,6 +27,11 @@ that name is globally unique across the paint DB) or a structured
 cross-brand name collisions (e.g. "Ultramarine Blue" ships in both vallejo
 and army_painter at different hex); a bare ambiguous name is an error.
 
+Airbrush-line paints (vallejo_model_air, citadel_air, etc.) are excluded
+from recommendations by default — they handle differently from brush
+paints. Set "include_air": true to allow them, or name a specific air line
+in brand_filter to opt that one line back in. Owned air paints stay usable.
+
 Output schema (optimize): see README and docstring of `run_optimize`.
 
 Errors exit nonzero with a structured JSON object on stderr:
@@ -93,13 +98,17 @@ def run_optimize(payload: dict, paint_db_path: Path | None = None) -> dict:
     max_per_recipe = int(payload.get("max_paints_per_recipe", DEFAULTS["max_paints_per_recipe"]))
     neighborhood = int(payload.get("neighborhood", DEFAULT_NEIGHBORHOOD))
     top_k = int(payload.get("top_k", DEFAULT_TOP_K))
+    include_air = bool(payload.get("include_air", False))
 
     if max_per_recipe not in (1, 2, 3):
         raise ValueError("max_paints_per_recipe must be 1, 2, or 3")
 
     paints = load_paints(paint_db_path)
     candidates, owned = filter_paints(
-        paints, brand_filter=brand_filter or None, already_owned=already_owned or None
+        paints,
+        brand_filter=brand_filter or None,
+        already_owned=already_owned or None,
+        exclude_air=not include_air,
     )
     if not candidates:
         raise ValueError("no candidate paints after brand_filter")

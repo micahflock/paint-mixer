@@ -50,6 +50,27 @@ def test_metallics_and_washes_excluded_from_solids():
         assert excluded not in names, f"{excluded} should be excluded as metallic"
 
 
+def test_air_paints_excluded_by_default():
+    paints = load_paints()
+    candidates, _ = filter_paints(paints)
+    assert candidates, "expected a non-empty candidate pool"
+    assert not any("air" in p.line.split("_") for p in candidates), (
+        "air paints must be excluded from the default candidate pool"
+    )
+
+
+def test_air_line_kept_when_explicitly_requested():
+    paints = load_paints()
+    candidates, _ = filter_paints(paints, brand_filter=["vallejo_model_air"])
+    assert candidates and all(p.line == "vallejo_model_air" for p in candidates)
+
+
+def test_include_air_flag_admits_air_paints():
+    paints = load_paints()
+    candidates, _ = filter_paints(paints, exclude_air=False)
+    assert any("air" in p.line.split("_") for p in candidates)
+
+
 def test_filter_paints_colliding_name_should_disambiguate():
     """Regression target for the name-collision bug introduced by Army Painter.
 
