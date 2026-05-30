@@ -1,0 +1,809 @@
+{
+  "generated_at": "2026-05-30T10:23:22",
+  "input": {
+    "targets": [
+      {
+        "name": "Dark Olive Drab",
+        "hex": "#4A4F2C"
+      },
+      {
+        "name": "Olive Drab (Faded)",
+        "hex": "#6F6D47"
+      },
+      {
+        "name": "Neutral Gray",
+        "hex": "#7E8487"
+      },
+      {
+        "name": "Medium Green",
+        "hex": "#4B6043"
+      },
+      {
+        "name": "Insignia Red",
+        "hex": "#BB1F2E"
+      },
+      {
+        "name": "Insignia Yellow",
+        "hex": "#F0BE0E"
+      },
+      {
+        "name": "Insignia Blue",
+        "hex": "#2B5797"
+      },
+      {
+        "name": "Insignia White",
+        "hex": "#F0EDE3"
+      },
+      {
+        "name": "Insignia Black",
+        "hex": "#1F1F1F"
+      },
+      {
+        "name": "Insignia Green",
+        "hex": "#1F5C28"
+      },
+      {
+        "name": "Nose Art Script White",
+        "hex": "#F5F0E3"
+      },
+      {
+        "name": "Nose Art Script Red",
+        "hex": "#A8201A"
+      },
+      {
+        "name": "Kill Mark \u2014 Hinomaru",
+        "hex": "#C8102E"
+      },
+      {
+        "name": "Pinup Flesh Tone",
+        "hex": "#E5B895"
+      },
+      {
+        "name": "Pinup Highlight Red",
+        "hex": "#D32F2F"
+      },
+      {
+        "name": "Invasion Stripe White",
+        "hex": "#EDE8DA"
+      },
+      {
+        "name": "Invasion Stripe Black",
+        "hex": "#222018"
+      },
+      {
+        "name": "Exhaust Soot",
+        "hex": "#3A2E26"
+      },
+      {
+        "name": "Oil Stain",
+        "hex": "#2B2620"
+      },
+      {
+        "name": "Gun Blast Staining",
+        "hex": "#5C4A3A"
+      },
+      {
+        "name": "Rust Streak",
+        "hex": "#7D3A1E"
+      },
+      {
+        "name": "Field Dust",
+        "hex": "#B5A082"
+      },
+      {
+        "name": "Tactical Blood",
+        "hex": "#7A0F0F"
+      }
+    ],
+    "brand_filter": [
+      "citadel",
+      "vallejo_model_color"
+    ],
+    "max_paints": 12,
+    "tolerance_delta_e": 5.0,
+    "max_paints_per_recipe": 3,
+    "already_owned": [
+      {
+        "name": "Phalanx Blue",
+        "brand": "army_painter"
+      },
+      {
+        "name": "Deep Grey",
+        "brand": "army_painter"
+      },
+      {
+        "name": "Matt White",
+        "brand": "army_painter"
+      },
+      {
+        "name": "Ultramarine Blue",
+        "brand": "army_painter"
+      },
+      {
+        "name": "Matt Black",
+        "brand": "army_painter"
+      },
+      {
+        "name": "Greenskin",
+        "brand": "army_painter"
+      },
+      {
+        "name": "Leather Brown",
+        "brand": "army_painter"
+      },
+      {
+        "name": "Pure Red",
+        "brand": "army_painter"
+      },
+      {
+        "name": "Daemonic Yellow",
+        "brand": "army_painter"
+      }
+    ]
+  },
+  "result": {
+    "purchase_list": [
+      {
+        "name": "Administratum Grey",
+        "brand": "citadel",
+        "line": "citadel_layer",
+        "sku": "",
+        "hex": "#989C94"
+      },
+      {
+        "name": "Wraithbone",
+        "brand": "citadel",
+        "line": "citadel_base",
+        "sku": "",
+        "hex": "#DBD1B2"
+      },
+      {
+        "name": "Fern Green",
+        "brand": "vallejo",
+        "line": "vallejo_model_color",
+        "sku": "70.833",
+        "hex": "#475436"
+      },
+      {
+        "name": "Leather Brown",
+        "brand": "vallejo",
+        "line": "vallejo_model_color",
+        "sku": "70.871",
+        "hex": "#594335"
+      }
+    ],
+    "recipes": [
+      {
+        "target": {
+          "name": "Dark Olive Drab",
+          "hex": "#4A4F2C"
+        },
+        "blend": [
+          {
+            "paint": "Fern Green",
+            "ratio": 1.0,
+            "brand": "vallejo",
+            "line": "vallejo_model_color",
+            "hex": "#475436"
+          }
+        ],
+        "predicted_hex": "#475436",
+        "delta_e": 4.03,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Olive Drab (Faded)",
+          "hex": "#6F6D47"
+        },
+        "blend": [
+          {
+            "paint": "Fern Green",
+            "ratio": 0.8,
+            "brand": "vallejo",
+            "line": "vallejo_model_color",
+            "hex": "#475436"
+          },
+          {
+            "paint": "Daemonic Yellow",
+            "ratio": 0.2,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FECE2A"
+          }
+        ],
+        "predicted_hex": "#6A6B38",
+        "delta_e": 3.75,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Neutral Gray",
+          "hex": "#7E8487"
+        },
+        "blend": [
+          {
+            "paint": "Administratum Grey",
+            "ratio": 0.7,
+            "brand": "citadel",
+            "line": "citadel_layer",
+            "hex": "#989C94"
+          },
+          {
+            "paint": "Deep Grey",
+            "ratio": 0.3,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#4B5164"
+          }
+        ],
+        "predicted_hex": "#808585",
+        "delta_e": 1.36,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Medium Green",
+          "hex": "#4B6043"
+        },
+        "blend": [
+          {
+            "paint": "Greenskin",
+            "ratio": 0.5,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#1F7843"
+          },
+          {
+            "paint": "Leather Brown",
+            "ratio": 0.4,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#7C5B54"
+          },
+          {
+            "paint": "Matt Black",
+            "ratio": 0.1,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#000000"
+          }
+        ],
+        "predicted_hex": "#4D6243",
+        "delta_e": 0.65,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Insignia Red",
+          "hex": "#BB1F2E"
+        },
+        "blend": [
+          {
+            "paint": "Pure Red",
+            "ratio": 0.8,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#CD151C"
+          },
+          {
+            "paint": "Ultramarine Blue",
+            "ratio": 0.2,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#284D8E"
+          }
+        ],
+        "predicted_hex": "#B72D35",
+        "delta_e": 1.71,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Insignia Yellow",
+          "hex": "#F0BE0E"
+        },
+        "blend": [
+          {
+            "paint": "Daemonic Yellow",
+            "ratio": 0.9,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FECE2A"
+          },
+          {
+            "paint": "Leather Brown",
+            "ratio": 0.1,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#7C5B54"
+          }
+        ],
+        "predicted_hex": "#F1C234",
+        "delta_e": 1.89,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Insignia Blue",
+          "hex": "#2B5797"
+        },
+        "blend": [
+          {
+            "paint": "Ultramarine Blue",
+            "ratio": 0.9,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#284D8E"
+          },
+          {
+            "paint": "Phalanx Blue",
+            "ratio": 0.1,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#048BAE"
+          }
+        ],
+        "predicted_hex": "#285391",
+        "delta_e": 1.42,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Insignia White",
+          "hex": "#F0EDE3"
+        },
+        "blend": [
+          {
+            "paint": "Matt White",
+            "ratio": 0.7,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FFFFFF"
+          },
+          {
+            "paint": "Wraithbone",
+            "ratio": 0.3,
+            "brand": "citadel",
+            "line": "citadel_base",
+            "hex": "#DBD1B2"
+          }
+        ],
+        "predicted_hex": "#F4F1E7",
+        "delta_e": 0.94,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Insignia Black",
+          "hex": "#1F1F1F"
+        },
+        "blend": [
+          {
+            "paint": "Matt Black",
+            "ratio": 0.9,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#000000"
+          },
+          {
+            "paint": "Matt White",
+            "ratio": 0.1,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FFFFFF"
+          }
+        ],
+        "predicted_hex": "#1B1B1B",
+        "delta_e": 1.11,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Insignia Green",
+          "hex": "#1F5C28"
+        },
+        "blend": [
+          {
+            "paint": "Greenskin",
+            "ratio": 0.8,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#1F7843"
+          },
+          {
+            "paint": "Matt Black",
+            "ratio": 0.2,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#000000"
+          }
+        ],
+        "predicted_hex": "#1E5F36",
+        "delta_e": 3.42,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Nose Art Script White",
+          "hex": "#F5F0E3"
+        },
+        "blend": [
+          {
+            "paint": "Matt White",
+            "ratio": 0.6,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FFFFFF"
+          },
+          {
+            "paint": "Wraithbone",
+            "ratio": 0.4,
+            "brand": "citadel",
+            "line": "citadel_base",
+            "hex": "#DBD1B2"
+          }
+        ],
+        "predicted_hex": "#F1ECE0",
+        "delta_e": 0.81,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Nose Art Script Red",
+          "hex": "#A8201A"
+        },
+        "blend": [
+          {
+            "paint": "Pure Red",
+            "ratio": 0.8,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#CD151C"
+          },
+          {
+            "paint": "Matt Black",
+            "ratio": 0.2,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#000000"
+          }
+        ],
+        "predicted_hex": "#A21B19",
+        "delta_e": 1.68,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Kill Mark \u2014 Hinomaru",
+          "hex": "#C8102E"
+        },
+        "blend": [
+          {
+            "paint": "Pure Red",
+            "ratio": 0.9,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#CD151C"
+          },
+          {
+            "paint": "Ultramarine Blue",
+            "ratio": 0.1,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#284D8E"
+          }
+        ],
+        "predicted_hex": "#C22429",
+        "delta_e": 2.78,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Pinup Flesh Tone",
+          "hex": "#E5B895"
+        },
+        "blend": [
+          {
+            "paint": "Wraithbone",
+            "ratio": 0.8,
+            "brand": "citadel",
+            "line": "citadel_base",
+            "hex": "#DBD1B2"
+          },
+          {
+            "paint": "Pure Red",
+            "ratio": 0.2,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#CD151C"
+          }
+        ],
+        "predicted_hex": "#DFB292",
+        "delta_e": 1.77,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Pinup Highlight Red",
+          "hex": "#D32F2F"
+        },
+        "blend": [
+          {
+            "paint": "Pure Red",
+            "ratio": 0.9,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#CD151C"
+          },
+          {
+            "paint": "Matt White",
+            "ratio": 0.1,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FFFFFF"
+          }
+        ],
+        "predicted_hex": "#D73C31",
+        "delta_e": 2.73,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Invasion Stripe White",
+          "hex": "#EDE8DA"
+        },
+        "blend": [
+          {
+            "paint": "Matt White",
+            "ratio": 0.5,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FFFFFF"
+          },
+          {
+            "paint": "Wraithbone",
+            "ratio": 0.5,
+            "brand": "citadel",
+            "line": "citadel_base",
+            "hex": "#DBD1B2"
+          }
+        ],
+        "predicted_hex": "#EDE8D8",
+        "delta_e": 0.69,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Invasion Stripe Black",
+          "hex": "#222018"
+        },
+        "blend": [
+          {
+            "paint": "Matt Black",
+            "ratio": 0.9,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#000000"
+          },
+          {
+            "paint": "Daemonic Yellow",
+            "ratio": 0.1,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FECE2A"
+          }
+        ],
+        "predicted_hex": "#1D180C",
+        "delta_e": 3.25,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Exhaust Soot",
+          "hex": "#3A2E26"
+        },
+        "blend": [
+          {
+            "paint": "Leather Brown",
+            "ratio": 0.6,
+            "brand": "vallejo",
+            "line": "vallejo_model_color",
+            "hex": "#594335"
+          },
+          {
+            "paint": "Matt Black",
+            "ratio": 0.4,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#000000"
+          }
+        ],
+        "predicted_hex": "#362A22",
+        "delta_e": 1.3,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Oil Stain",
+          "hex": "#2B2620"
+        },
+        "blend": [
+          {
+            "paint": "Matt Black",
+            "ratio": 0.7,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#000000"
+          },
+          {
+            "paint": "Deep Grey",
+            "ratio": 0.2,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#4B5164"
+          },
+          {
+            "paint": "Daemonic Yellow",
+            "ratio": 0.1,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#FECE2A"
+          }
+        ],
+        "predicted_hex": "#2B261F",
+        "delta_e": 0.78,
+        "confidence": "high"
+      },
+      {
+        "target": {
+          "name": "Gun Blast Staining",
+          "hex": "#5C4A3A"
+        },
+        "blend": [
+          {
+            "paint": "Leather Brown",
+            "ratio": 1.0,
+            "brand": "vallejo",
+            "line": "vallejo_model_color",
+            "hex": "#594335"
+          }
+        ],
+        "predicted_hex": "#594335",
+        "delta_e": 3.33,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Rust Streak",
+          "hex": "#7D3A1E"
+        },
+        "blend": [
+          {
+            "paint": "Leather Brown",
+            "ratio": 0.7,
+            "brand": "vallejo",
+            "line": "vallejo_model_color",
+            "hex": "#594335"
+          },
+          {
+            "paint": "Pure Red",
+            "ratio": 0.3,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#CD151C"
+          }
+        ],
+        "predicted_hex": "#7D402E",
+        "delta_e": 4.06,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Field Dust",
+          "hex": "#B5A082"
+        },
+        "blend": [
+          {
+            "paint": "Wraithbone",
+            "ratio": 0.6,
+            "brand": "citadel",
+            "line": "citadel_base",
+            "hex": "#DBD1B2"
+          },
+          {
+            "paint": "Leather Brown",
+            "ratio": 0.4,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#7C5B54"
+          }
+        ],
+        "predicted_hex": "#B4A08B",
+        "delta_e": 3.37,
+        "confidence": "medium"
+      },
+      {
+        "target": {
+          "name": "Tactical Blood",
+          "hex": "#7A0F0F"
+        },
+        "blend": [
+          {
+            "paint": "Pure Red",
+            "ratio": 0.6,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#CD151C"
+          },
+          {
+            "paint": "Matt Black",
+            "ratio": 0.4,
+            "brand": "army_painter",
+            "line": "army_painter_fanatic",
+            "hex": "#000000"
+          }
+        ],
+        "predicted_hex": "#781B15",
+        "delta_e": 1.62,
+        "confidence": "high"
+      }
+    ],
+    "unreachable": [],
+    "summary": {
+      "paints_recommended": 13,
+      "paints_to_buy": 4,
+      "paints_already_owned": 9,
+      "targets_total": 23,
+      "targets_hit": 23,
+      "targets_missed": 0,
+      "tolerance_delta_e": 5.0
+    },
+    "constraints_echo": {
+      "brand_filter": [
+        "citadel",
+        "vallejo_model_color"
+      ],
+      "max_paints": 12,
+      "max_paints_per_recipe": 3,
+      "already_owned": [
+        {
+          "name": "Phalanx Blue",
+          "brand": "army_painter"
+        },
+        {
+          "name": "Deep Grey",
+          "brand": "army_painter"
+        },
+        {
+          "name": "Matt White",
+          "brand": "army_painter"
+        },
+        {
+          "name": "Ultramarine Blue",
+          "brand": "army_painter"
+        },
+        {
+          "name": "Matt Black",
+          "brand": "army_painter"
+        },
+        {
+          "name": "Greenskin",
+          "brand": "army_painter"
+        },
+        {
+          "name": "Leather Brown",
+          "brand": "army_painter"
+        },
+        {
+          "name": "Pure Red",
+          "brand": "army_painter"
+        },
+        {
+          "name": "Daemonic Yellow",
+          "brand": "army_painter"
+        }
+      ]
+    }
+  }
+}
