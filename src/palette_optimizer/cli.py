@@ -10,10 +10,16 @@ Input schema (optimize):
         "targets": [{"name": "Insignia Red", "hex": "#BB1F2E"}, ...],
         "brand_filter": ["citadel", "vallejo_model_color"],
         "max_paints": 12,
-        "already_owned": ["Mephiston Red", ...],
+        "already_owned": ["Mephiston Red", {"name": "Ultramarine Blue", "brand": "army_painter"}, ...],
         "tolerance_delta_e": 5.0,
         "max_paints_per_recipe": 3
     }
+
+Each `already_owned` item is either a bare name string (resolved only when
+that name is globally unique across the paint DB) or a structured
+{"name": "...", "brand": "..."} object. The structured form disambiguates
+cross-brand name collisions (e.g. "Ultramarine Blue" ships in both vallejo
+and army_painter at different hex); a bare ambiguous name is an error.
 
 Output schema (optimize): see README and docstring of `run_optimize`.
 
@@ -29,7 +35,7 @@ import sys
 from pathlib import Path
 
 from .color import hex_to_lab, parse_hex
-from .db import filter_paints, load_paints, validate_db
+from .db import _index_paints, filter_paints, load_paints, resolve_paint_ref, validate_db
 from .optimize import (
     DEFAULT_NEIGHBORHOOD,
     DEFAULT_TOP_K,
@@ -92,7 +98,7 @@ def run_optimize(payload: dict, paint_db_path: Path | None = None) -> dict:
     if not candidates:
         raise ValueError("no candidate paints after brand_filter")
 
-    owned_names = {p.name for p in owned}
+    owned_ids = {p.id for p in owned}
 
     # Per-target blend search.
     target_results: list[TargetResult] = []
@@ -104,28 +110,28 @@ def run_optimize(payload: dict, paint_db_path: Path | None = None) -> dict:
             max_paints_per_recipe=max_per_recipe,
             neighborhood=neighborhood,
             top_k=top_k,
-            forced_include=owned_names,
+            forced_include=owned_ids,
         )
         target_results.append(tr)
 
-    # Set cover.
-    cand_names = [p.name for p in candidates]
+    # Set cover (keyed on globally-unique Paint.id).
+    cand_ids = [p.id for p in candidates]
     pool = greedy_set_cover(
         target_results,
-        cand_names,
+        cand_ids,
         max_paints=max_paints,
         tolerance=tolerance,
-        owned=owned_names,
+        owned=owned_ids,
     )
     recipes, unreachable = assign_recipes(target_results, frozenset(pool), tolerance)
 
     # Resolve paint metadata for the purchase list.
-    paint_by_name = {p.name: p for p in candidates}
+    paint_by_id = {p.id: p for p in candidates}
     purchase_list = []
-    for name in sorted(pool):
-        if name in owned_names:
+    for pid in sorted(pool):
+        if pid in owned_ids:
             continue
-        p = paint_by_name.get(name)
+        p = paint_by_id.get(pid)
         if p is None:
             continue
         purchase_list.append({
@@ -137,10 +143,10 @@ def run_optimize(payload: dict, paint_db_path: Path | None = None) -> dict:
         })
 
     out_recipes = [
-        _recipe_dict(tr, blend, tolerance, paint_by_name) for tr, blend in recipes
+        _recipe_dict(tr, blend, tolerance, paint_by_id) for tr, blend in recipes
     ]
     out_unreachable = [
-        _unreachable_dict(tr, blend, tolerance) for tr, blend in unreachable
+        _unreachable_dict(tr, blend, tolerance, paint_by_id) for tr, blend in unreachable
     ]
 
     return {
@@ -150,7 +156,7 @@ def run_optimize(payload: dict, paint_db_path: Path | None = None) -> dict:
         "summary": {
             "paints_recommended": len(pool),
             "paints_to_buy": len(purchase_list),
-            "paints_already_owned": len(owned_names & pool),
+            "paints_already_owned": len(owned_ids & pool),
             "targets_total": len(target_results),
             "targets_hit": len(recipes),
             "targets_missed": len(unreachable),
@@ -165,12 +171,13 @@ def run_optimize(payload: dict, paint_db_path: Path | None = None) -> dict:
     }
 
 
-def _recipe_dict(tr: TargetResult, blend: Blend, tolerance: float, by_name: dict) -> dict:
+def _recipe_dict(tr: TargetResult, blend: Blend, tolerance: float, by_id: dict) -> dict:
     components = []
-    for name, ratio in zip(blend.paint_names, blend.ratios, strict=True):
-        p = by_name.get(name)
+    for pid, ratio in zip(blend.paint_ids, blend.ratios, strict=True):
+        p = by_id.get(pid)
         components.append({
-            "paint": name,
+            # JSON reports the human-facing bare name, not the brand:name id.
+            "paint": p.name if p else pid,
             "ratio": round(ratio, 3),
             "brand": p.brand if p else None,
             "line": p.line if p else None,
@@ -185,15 +192,17 @@ def _recipe_dict(tr: TargetResult, blend: Blend, tolerance: float, by_name: dict
     }
 
 
-def _unreachable_dict(tr: TargetResult, blend: Blend | None, tolerance: float) -> dict:
+def _unreachable_dict(
+    tr: TargetResult, blend: Blend | None, tolerance: float, by_id: dict
+) -> dict:
     reason = "no blend within tolerance using the chosen paint pool"
     return {
         "target": {"name": tr.target_name, "hex": tr.target_hex},
         "closest_delta_e": round(blend.delta_e, 2) if blend else None,
         "closest_blend": (
             [
-                {"paint": n, "ratio": round(r, 3)}
-                for n, r in zip(blend.paint_names, blend.ratios, strict=True)
+                {"paint": by_id[pid].name if pid in by_id else pid, "ratio": round(r, 3)}
+                for pid, r in zip(blend.paint_ids, blend.ratios, strict=True)
             ]
             if blend else None
         ),
@@ -224,6 +233,11 @@ def cmd_explain_recipe(args: argparse.Namespace) -> int:
 
     Input JSON:
         {"target_hex": "#...", "blend": [{"paint": "...", "ratio": 0.7}, ...]}
+
+    Each blend component's "paint" is either a bare name string (resolved
+    only when globally unique across the DB) or a structured
+    {"name": "...", "brand": "..."} object that disambiguates cross-brand
+    name collisions.
     """
     payload = _load_input(args)
     target_hex = payload["target_hex"]
@@ -231,15 +245,17 @@ def cmd_explain_recipe(args: argparse.Namespace) -> int:
     tolerance = float(payload.get("tolerance_delta_e", DEFAULTS["tolerance_delta_e"]))
 
     db_path = Path(args.paint_db) if args.paint_db else None
-    by_name = {p.name: p for p in load_paints(db_path)}
+    by_id, by_name = _index_paints(load_paints(db_path))
 
     from .color import BlendComponent, blend_lab, delta_e_2000, lab_to_hex
 
     comps = []
+    resolved = []
     for c in blend_in:
-        p = by_name.get(c["paint"])
+        p = resolve_paint_ref(c["paint"], by_id, by_name)
         if p is None:
             raise ValueError(f"unknown paint: {c['paint']!r}")
+        resolved.append(p)
         comps.append(BlendComponent(p.name, p.hex, p.lab, float(c["ratio"])))
 
     lab = blend_lab(comps)
@@ -253,13 +269,13 @@ def cmd_explain_recipe(args: argparse.Namespace) -> int:
         "confidence": confidence_for(de, tolerance),
         "components": [
             {
-                "paint": c.name,
-                "hex": c.hex,
+                "paint": p.name,
+                "hex": p.hex,
                 "ratio": round(c.ratio, 3),
-                "brand": by_name[c.name].brand,
-                "line": by_name[c.name].line,
+                "brand": p.brand,
+                "line": p.line,
             }
-            for c in comps
+            for c, p in zip(comps, resolved, strict=True)
         ],
     }
     json.dump(out, sys.stdout, indent=2)

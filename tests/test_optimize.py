@@ -61,6 +61,54 @@ def test_already_owned_eliminates_purchase(paints):
     assert out["summary"]["targets_hit"] == 1
 
 
+@pytest.mark.parametrize("brand", ["army_painter", "vallejo"])
+def test_structured_already_owned_disambiguates_brand(paints, brand):
+    """End-to-end: a cross-brand colliding name passed via the structured
+    {"name","brand"} form must resolve to exactly the brand requested, so
+    recipes are computed against that brand's hex — never a last-write-wins
+    sibling. "Ultramarine Blue" ships in both army_painter and vallejo at
+    different hex; asking for one brand must yield that brand's hex.
+    """
+    colliders = {p.brand: p for p in paints if p.name == "Ultramarine Blue"}
+    assert {"army_painter", "vallejo"} <= set(colliders), colliders
+    assert colliders["army_painter"].hex != colliders["vallejo"].hex
+    wanted = colliders[brand]
+    other = colliders["vallejo" if brand == "army_painter" else "army_painter"]
+
+    # Target is the requested brand's exact hex. Owning that exact paint
+    # should yield a near-zero solo recipe referencing the requested brand.
+    out = run_optimize({
+        "targets": [{"name": "Owned Ultra", "hex": wanted.hex}],
+        "already_owned": [{"name": "Ultramarine Blue", "brand": brand}],
+        "max_paints": 6,
+        "tolerance_delta_e": 5.0,
+    })
+
+    assert out["summary"]["targets_hit"] == 1
+    recipe = out["recipes"][0]
+    comp = next(c for c in recipe["blend"] if c["paint"] == "Ultramarine Blue")
+    assert comp["brand"] == brand
+    assert comp["hex"] == wanted.hex
+    assert comp["hex"] != other.hex  # the wrong brand did not silently win
+    assert recipe["delta_e"] < 1.0
+    # The owned paint is free, so it must not appear in the purchase list.
+    assert not any(
+        e["name"] == "Ultramarine Blue" and e["brand"] == brand
+        for e in out["purchase_list"]
+    )
+
+
+def test_bare_ambiguous_owned_name_errors_end_to_end(paints):
+    """A bare colliding name must raise through run_optimize, not silently pick."""
+    with pytest.raises(ValueError, match="ambiguous|disambiguate|multiple"):
+        run_optimize({
+            "targets": [{"name": "X", "hex": "#284D8E"}],
+            "already_owned": ["Ultramarine Blue"],
+            "max_paints": 6,
+            "tolerance_delta_e": 5.0,
+        })
+
+
 def test_unreachable_target_is_reported(paints):
     """Targets impossible to reach (e.g. fluorescent magenta with citadel-only)
     should appear in the unreachable list with a closest_delta_e and a reason."""

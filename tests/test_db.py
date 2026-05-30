@@ -27,8 +27,14 @@ def test_brand_filter_matches_brand_or_line():
 
 def test_owned_paints_included_even_when_brand_filter_excludes_them():
     paints = load_paints()
-    # Pick an owned vallejo paint while filtering to citadel only — should still appear.
-    vallejo = next(p for p in paints if p.brand == "vallejo")
+    # Pick an owned vallejo paint whose name is globally unique (so the bare
+    # name resolves) while filtering to citadel only — should still appear.
+    name_counts: dict[str, int] = {}
+    for p in paints:
+        name_counts[p.name] = name_counts.get(p.name, 0) + 1
+    vallejo = next(
+        p for p in paints if p.brand == "vallejo" and name_counts[p.name] == 1
+    )
     candidates, owned = filter_paints(
         paints, brand_filter=["citadel"], already_owned=[vallejo.name]
     )
@@ -44,17 +50,6 @@ def test_metallics_and_washes_excluded_from_solids():
         assert excluded not in names, f"{excluded} should be excluded as metallic"
 
 
-@pytest.mark.xfail(
-    reason=(
-        "Cross-brand name collisions are not disambiguated yet. filter_paints "
-        "and downstream code key paints by bare name. Planned refactor: "
-        "globally-unique paint identity (brand:name) + structured "
-        '{"name","brand"} form in already_owned. Remove this marker once '
-        "filter_paints either raises on ambiguous bare names or accepts the "
-        "structured form."
-    ),
-    strict=True,
-)
 def test_filter_paints_colliding_name_should_disambiguate():
     """Regression target for the name-collision bug introduced by Army Painter.
 

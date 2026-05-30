@@ -4,8 +4,9 @@ The CSV at data/paints.csv is the source of record. Schema:
 
     name,brand,line,sku,hex,category,notes
 
-- name:     human-readable paint name (e.g. "Mephiston Red")
-- brand:    "citadel" | "vallejo"
+- name:     human-readable paint name (e.g. "Mephiston Red"). Not unique
+            across brands; pair with `brand` (see Paint.id) for identity.
+- brand:    "citadel" | "vallejo" | "army_painter"
 - line:     specific product line (e.g. "citadel_base", "vallejo_model_color",
             "vallejo_model_air"). Model Air is brushable but handles
             differently from Model Color and is kept distinct.
@@ -52,6 +53,19 @@ class Paint:
     def lab(self) -> np.ndarray:
         return _cached_hex_to_lab(self.hex)
 
+    @property
+    def id(self) -> str:
+        """Globally-unique paint identity.
+
+        Bare `name` is not unique: the same name can ship in multiple
+        brands at different hex values (e.g. "Ultramarine Blue" exists in
+        both vallejo and army_painter). The optimizer, CLI, and JSON I/O
+        key on this `brand:name` identity so the correct Paint object is
+        used. The brand-prefixed form is internal — JSON output still
+        reports the bare `name` (plus brand/line) for humans.
+        """
+        return f"{self.brand}:{self.name}"
+
 
 def load_paints(path: Path | None = None, *, only_solid: bool = True) -> list[Paint]:
     csv_path = path or DEFAULT_CSV
@@ -90,31 +104,86 @@ def _strip_comments(lines):
         yield line
 
 
+def _index_paints(
+    paints: list[Paint],
+) -> tuple[dict[str, Paint], dict[str, list[Paint]]]:
+    """Build (by-id, by-name) lookup maps over a paint list.
+
+    `by_id` keys on the globally-unique `Paint.id` (brand:name). `by_name`
+    groups paints sharing a bare name so callers can detect cross-brand
+    collisions rather than silently picking a last-write-wins entry.
+    """
+    by_id: dict[str, Paint] = {}
+    by_name: dict[str, list[Paint]] = {}
+    for p in paints:
+        by_id[p.id] = p
+        by_name.setdefault(p.name, []).append(p)
+    return by_id, by_name
+
+
+def resolve_paint_ref(
+    item: str | dict,
+    by_id: dict[str, Paint],
+    by_name: dict[str, list[Paint]],
+) -> Paint | None:
+    """Resolve a paint reference to a concrete Paint.
+
+    A reference is either:
+      - a bare name string, resolved only when the name is globally unique
+        across the DB; an ambiguous bare name raises ValueError pointing at
+        the structured form, and
+      - a {"name": "...", "brand": "..."} dict, which always disambiguates.
+
+    Returns None when the reference matches no paint (e.g. a name from a
+    brand that isn't in the DB), leaving it to the caller to ignore or error.
+    """
+    if isinstance(item, dict):
+        name = (item.get("name") or "").strip()
+        brand = (item.get("brand") or "").strip().lower()
+        if not name or not brand:
+            raise ValueError(
+                "structured paint reference requires both 'name' and 'brand': "
+                f"{item!r}"
+            )
+        return by_id.get(f"{brand}:{name}")
+
+    name = str(item).strip()
+    matches = by_name.get(name, [])
+    if len(matches) > 1:
+        brands = sorted(p.brand for p in matches)
+        raise ValueError(
+            f"paint name {name!r} is ambiguous across brands {brands}; "
+            f"disambiguate with the structured form "
+            f'{{"name": "{name}", "brand": "<one of {brands}>"}}'
+        )
+    return matches[0] if matches else None
+
+
 def filter_paints(
     paints: list[Paint],
     *,
     brand_filter: list[str] | None = None,
-    already_owned: list[str] | None = None,
+    already_owned: list[str | dict] | None = None,
 ) -> tuple[list[Paint], list[Paint]]:
     """Return (candidate pool, owned pool) given user constraints.
 
     Owned paints are always candidates (free in the cover problem) regardless
-    of brand_filter. Candidate pool is brand-filtered, deduplicated by name.
+    of brand_filter. Candidate pool is brand-filtered.
 
-    FIXME: paint identity here (and throughout the optimizer + CLI) is the
-    bare `name` string. Adding Army Painter introduced cross-brand name
-    collisions (e.g. "Ultramarine Blue" exists in both vallejo and
-    army_painter at different hex), and last-write-wins on the by-name
-    dict can silently pick the wrong Paint. The planned refactor moves
-    to a globally-unique identity (brand:name) and accepts a structured
-    {"name", "brand"} form in already_owned. See the xfail test
-    tests/test_db.py::test_filter_paints_colliding_name_should_disambiguate.
+    Paint identity here (and throughout the optimizer + CLI) is the
+    globally-unique `Paint.id` (brand:name), not the bare `name`. Adding
+    Army Painter introduced cross-brand name collisions (e.g. "Ultramarine
+    Blue" exists in both vallejo and army_painter at different hex), so
+    `already_owned` items may be either a bare string (resolved only when
+    the name is unique across the DB) or a {"name", "brand"} dict that
+    always disambiguates. An ambiguous bare name raises ValueError. See
+    resolve_paint_ref.
     """
-    by_name = {p.name: p for p in paints}
+    by_id, by_name = _index_paints(paints)
     owned: list[Paint] = []
     if already_owned:
-        for name in already_owned:
-            p = by_name.get(name)
+        for item in already_owned:
+            p = resolve_paint_ref(item, by_id, by_name)
             if p is not None:
                 owned.append(p)
     if brand_filter:
@@ -125,12 +194,12 @@ def filter_paints(
         ]
     else:
         candidates = list(paints)
-    # Ensure owned are in the candidate list.
-    cand_names = {p.name for p in candidates}
+    # Ensure owned are in the candidate list (keyed on identity, not name).
+    cand_ids = {p.id for p in candidates}
     for p in owned:
-        if p.name not in cand_names:
+        if p.id not in cand_ids:
             candidates.append(p)
-            cand_names.add(p.name)
+            cand_ids.add(p.id)
     return candidates, owned
 
 

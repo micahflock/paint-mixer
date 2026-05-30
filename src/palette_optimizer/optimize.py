@@ -74,14 +74,17 @@ RATIOS_3 = _ratios_3(10)
 
 @dataclass(frozen=True)
 class Blend:
-    paint_names: tuple[str, ...]
+    # paint_ids are globally-unique Paint.id values (brand:name), not bare
+    # names. This is internal to the optimizer; the CLI maps them back to
+    # human-facing name/brand/line for JSON output.
+    paint_ids: tuple[str, ...]
     ratios: tuple[float, ...]
     predicted_hex: str
     delta_e: float
 
     @property
     def support(self) -> frozenset[str]:
-        return frozenset(self.paint_names)
+        return frozenset(self.paint_ids)
 
 
 @dataclass
@@ -124,9 +127,9 @@ def search_blends_for_target(
     take = min(neighborhood, len(candidates))
     neigh_idx_list = list(int(i) for i in order[:take])
     forced = forced_include or set()
-    by_name = {p.name: i for i, p in enumerate(candidates)}
-    for name in forced:
-        idx = by_name.get(name)
+    by_id = {p.id: i for i, p in enumerate(candidates)}
+    for pid in forced:
+        idx = by_id.get(pid)
         if idx is not None and idx not in neigh_idx_list:
             neigh_idx_list.append(idx)
 
@@ -141,7 +144,7 @@ def search_blends_for_target(
     # 1-paint
     for i, p in enumerate(neigh):
         de = float(neigh_dists[i])
-        blends.append(Blend((p.name,), (1.0,), p.hex, de))
+        blends.append(Blend((p.id,), (1.0,), p.hex, de))
 
     # 2-paint: vectorize across all pairs × ratios
     if max_paints_per_recipe >= 2 and len(neigh) >= 2:
@@ -168,7 +171,7 @@ def search_blends_for_target(
             ra, rb = float(r[ri, 0]), float(r[ri, 1])
             lab = labs[pi, ri]
             blends.append(Blend(
-                (neigh[i].name, neigh[j].name),
+                (neigh[i].id, neigh[j].id),
                 (ra, rb),
                 lab_to_hex(lab),
                 float(des[flat_idx]),
@@ -199,7 +202,7 @@ def search_blends_for_target(
             ra, rb, rc = float(r[ri, 0]), float(r[ri, 1]), float(r[ri, 2])
             lab = labs[ti, ri]
             blends.append(Blend(
-                (neigh[i].name, neigh[j].name, neigh[k].name),
+                (neigh[i].id, neigh[j].id, neigh[k].id),
                 (ra, rb, rc),
                 lab_to_hex(lab),
                 float(des[flat_idx]),
@@ -237,12 +240,13 @@ def _covers(target: TargetResult, pool: frozenset[str], tolerance: float) -> Ble
 
 def greedy_set_cover(
     targets: list[TargetResult],
-    candidate_names: list[str],
+    candidate_ids: list[str],
     *,
     max_paints: int,
     tolerance: float,
     owned: set[str],
 ) -> set[str]:
+    # `candidate_ids` and `owned` are globally-unique Paint.id values.
     pool: set[str] = set(owned)
     covered: set[int] = set()
 
@@ -257,13 +261,13 @@ def greedy_set_cover(
     slots = max_paints - len(pool)
 
     while slots > 0 and len(covered) < len(targets):
-        best_name: str | None = None
+        best_id: str | None = None
         best_new_count = 0
         best_delta_sum = float("inf")
-        for name in candidate_names:
-            if name in pool:
+        for pid in candidate_ids:
+            if pid in pool:
                 continue
-            trial = frozenset(pool | {name})
+            trial = frozenset(pool | {pid})
             new_count = 0
             delta_sum = 0.0
             for i, t in enumerate(targets):
@@ -278,12 +282,12 @@ def greedy_set_cover(
             if (new_count > best_new_count) or (
                 new_count == best_new_count and delta_sum < best_delta_sum
             ):
-                best_name = name
+                best_id = pid
                 best_new_count = new_count
                 best_delta_sum = delta_sum
-        if best_name is None:
+        if best_id is None:
             break
-        pool.add(best_name)
+        pool.add(best_id)
         slots -= 1
         refresh_covered()
 

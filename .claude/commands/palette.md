@@ -18,11 +18,21 @@ root. Reads JSON, writes JSON. Schema:
   "targets": [{"name": "Insignia Red", "hex": "#BB1F2E"}, ...],
   "brand_filter": ["citadel", "vallejo_model_color"],
   "max_paints": 12,
-  "already_owned": ["Mephiston Red"],
+  "already_owned": [
+    {"name": "Ultramarine Blue", "brand": "army_painter"},
+    "Mephiston Red"
+  ],
   "tolerance_delta_e": 5.0,
   "max_paints_per_recipe": 3
 }
 ```
+
+Each `already_owned` item may be a bare name string (use only when the
+name is globally unique across the DB) or a structured
+`{"name": "...", "brand": "..."}` object. The structured form
+disambiguates cross-brand name collisions (e.g. "Ultramarine Blue" ships
+in both vallejo and army_painter at different hex). A bare ambiguous name
+is rejected with an error pointing at the structured form.
 
 Other subcommands:
 - `uv run palette-optimizer validate-db` — sanity-check the DB
@@ -55,10 +65,17 @@ Other subcommands:
      `["vallejo_model_air"]`.
    - Paints already owned: **first read `inventory.md` at the repo root
      if it exists** and use it as the default owned list. Confirm with
-     the user before passing names to the CLI — only include paints
-     whose names exist in `data/paints.csv`, since names from other
-     brands won't match and will be silently ignored. If the user
-     wants to add or remove from inventory.md, edit it directly.
+     the user before passing names to the CLI. **Pass each owned paint
+     in the structured `{"name", "brand"}` form whenever the inventory
+     section header makes the brand clear** — e.g. paints under
+     "## Army Painter — Warpaints Fanatic" become
+     `{"name": "Ultramarine Blue", "brand": "army_painter"}`. This avoids
+     cross-brand name collisions (some names exist in multiple brands at
+     different hex; a bare ambiguous name is rejected). Map the header to
+     the CSV `brand` value: Army Painter → `army_painter`, Citadel →
+     `citadel`, Vallejo → `vallejo`. Only fall back to a bare name when
+     the brand is genuinely unknown. If the user wants to add or remove
+     from inventory.md, edit it directly.
    - Tolerance: default 5.0 ΔE2000. Translate for the user:
      "high confidence" (< 2.5), "medium" (< 5), "low" (≥ 5).
    - Max paints: default 12.
